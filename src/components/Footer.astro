@@ -1,0 +1,70 @@
+<footer class="site-footer">
+  <div class="site-container footer-inner">
+    <div>
+      <strong>Eldritch, Inc.</strong>
+      <p>Software for better AI systems.</p>
+    </div>
+
+    <div class="footer-meta">
+      <a href="mailto:eris@eldritchinc.com">
+        eris@eldritchinc.com
+      </a>
+      <span>© {new Date().getFullYear()} Eldritch, Inc.</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: auto;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    gap: 3rem;
+    padding-block: 3rem;
+  }
+
+  strong {
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  p {
+    margin: 0.4rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+
+  .footer-meta {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    gap: 0.4rem;
+    color: var(--color-muted);
+    font-size: 0.85rem;
+  }
+
+  .footer-meta a {
+    color: var(--color-foreground);
+    text-decoration: none;
+  }
+
+  .footer-meta a:hover,
+  .footer-meta a:focus-visible {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 600px) {
+    .footer-inner {
+      flex-direction: column;
+    }
+
+    .footer-meta {
+      align-items: flex-start;
+    }
+  }
+</style>
