@@ -1,0 +1,621 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Azathoth"
+  description="Azathoth is an open-source framework for constructing, evaluating, and optimizing AI systems."
+>
+  <section class="hero">
+    <div class="site-container">
+      <p class="eyebrow">Azathoth</p>
+
+      <h1>
+        Build AI systems
+        that can measure
+        and improve themselves.
+      </h1>
+
+      <p class="lede">
+        Azathoth is an open-source framework for constructing,
+        evaluating, and optimizing multi-model AI systems across
+        quality, reliability, latency, cost, and capability.
+      </p>
+
+      <div class="actions">
+        <a
+          class="button button-primary"
+          href="https://github.com/EldritchInc/azathoth"
+          target="_blank"
+          rel="noreferrer"
+        >
+          View on GitHub
+          <span aria-hidden="true">↗</span>
+        </a>
+
+        <a
+          class="button button-secondary"
+          href="https://pypi.org/project/azathoth/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          PyPI
+          <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="problem">
+    <div class="site-container split">
+      <div>
+        <p class="eyebrow">Why Azathoth exists</p>
+        <h2>
+          AI software has become
+          too complex to tune by hand.
+        </h2>
+      </div>
+
+      <div class="copy">
+        <p>
+          Modern AI systems are assembled from models, prompts, tools,
+          context, retrieval, memory, evaluators, and multi-step workflows.
+        </p>
+
+        <p>
+          Every choice creates another dimension in the search space.
+          Which model should run this step? Which prompt performs best?
+          Which configuration meets the quality requirement without
+          wasting latency or money?
+        </p>
+
+        <p class="emphasis">
+          Azathoth treats those questions as engineering problems that
+          can be measured experimentally instead of answered by intuition.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="system">
+    <div class="site-container">
+      <p class="eyebrow eyebrow-light">The system</p>
+
+      <h2>
+        Construct.
+        Evaluate.
+        Optimize.
+      </h2>
+
+      <div class="system-grid">
+        <article>
+          <span>01</span>
+          <h3>Construct</h3>
+          <p>
+            Define explicit workflows made from models, prompts, tools,
+            context, and execution steps.
+          </p>
+        </article>
+
+        <article>
+          <span>02</span>
+          <h3>Execute</h3>
+          <p>
+            Run workflows through provider-neutral abstractions with
+            step-scoped model and tool bindings.
+          </p>
+        </article>
+
+        <article>
+          <span>03</span>
+          <h3>Evaluate</h3>
+          <p>
+            Measure outcomes against explicit goals and collect repeatable
+            evidence about quality, reliability, latency, and cost.
+          </p>
+        </article>
+
+        <article>
+          <span>04</span>
+          <h3>Optimize</h3>
+          <p>
+            Compare candidates and search for configurations that produce
+            better system-level tradeoffs.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="principles">
+    <div class="site-container split">
+      <div>
+        <p class="eyebrow">Architecture</p>
+
+        <h2>
+          Built for systems,
+          not isolated prompts.
+        </h2>
+      </div>
+
+      <div class="principle-list">
+        <article>
+          <h3>Provider-neutral</h3>
+          <p>
+            Models are capabilities, not architecture. Azathoth separates
+            workflow behavior from individual model providers.
+          </p>
+        </article>
+
+        <article>
+          <h3>Goal-directed</h3>
+          <p>
+            Evaluation begins with explicit goals so optimization has a
+            definition of better.
+          </p>
+        </article>
+
+        <article>
+          <h3>Workflow-native</h3>
+          <p>
+            AI applications are multi-step software systems. Azathoth
+            represents and evaluates them that way.
+          </p>
+        </article>
+
+        <article>
+          <h3>Evidence-driven</h3>
+          <p>
+            Decisions are based on measured runs, experiments, and
+            scorecards rather than assumptions about which model or prompt
+            should perform best.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="metrics">
+    <div class="site-container">
+      <p class="eyebrow">Optimization dimensions</p>
+
+      <div class="metric-grid">
+        <div>
+          <strong>Quality</strong>
+          <span>Does the system produce the right result?</span>
+        </div>
+
+        <div>
+          <strong>Reliability</strong>
+          <span>Does it keep producing acceptable results?</span>
+        </div>
+
+        <div>
+          <strong>Latency</strong>
+          <span>How quickly can the workflow complete?</span>
+        </div>
+
+        <div>
+          <strong>Cost</strong>
+          <span>What does the system consume to produce the result?</span>
+        </div>
+
+        <div>
+          <strong>Capability</strong>
+          <span>What can the system successfully accomplish?</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="open-source">
+    <div class="site-container open-source-inner">
+      <div>
+        <p class="eyebrow eyebrow-light">Open source</p>
+
+        <h2>
+          Built in public.
+          Designed to evolve.
+        </h2>
+      </div>
+
+      <div class="open-source-copy">
+        <p>
+          Azathoth is being developed as open-source infrastructure for
+          engineers building complex AI systems.
+        </p>
+
+        <p>
+          The project is designed around explicit architecture, strict
+          typing, repeatable evaluation, and a test-driven development
+          process.
+        </p>
+
+        <div class="actions">
+          <a
+            class="button button-light"
+            href="https://github.com/EldritchInc/azathoth"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Explore the repository
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="install">
+    <div class="site-container install-inner">
+      <div>
+        <p class="eyebrow">Get started</p>
+
+        <h2>
+          Azathoth is coming
+          to Python.
+        </h2>
+      </div>
+
+      <div>
+        <div class="command" aria-label="Azathoth installation command">
+          <code>pip install azathoth</code>
+        </div>
+
+        <p class="install-note">
+          The initial open-source release is coming soon.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    padding-block: clamp(6rem, 13vw, 12rem);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .eyebrow {
+    margin: 0 0 1.5rem;
+    color: var(--color-accent);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .eyebrow-light {
+    color: #9dbbac;
+  }
+
+  .hero h1 {
+    max-width: 1050px;
+    margin: 0;
+    font-size: clamp(3.5rem, 8vw, 7.5rem);
+    font-weight: 600;
+    letter-spacing: -0.06em;
+    line-height: 0.93;
+  }
+
+  .lede {
+    max-width: 760px;
+    margin: 2.5rem 0 0;
+    color: var(--color-muted);
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    line-height: 1.65;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    min-height: 3.25rem;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid var(--color-foreground);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      background-color 150ms ease,
+      color 150ms ease,
+      border-color 150ms ease;
+  }
+
+  .button-primary {
+    background: var(--color-foreground);
+    color: var(--color-surface);
+  }
+
+  .button-primary:hover,
+  .button-primary:focus-visible {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .button-secondary {
+    background: transparent;
+    color: var(--color-foreground);
+  }
+
+  .button-secondary:hover,
+  .button-secondary:focus-visible {
+    background: var(--color-foreground);
+    color: var(--color-surface);
+  }
+
+  .problem,
+  .principles,
+  .metrics,
+  .install {
+    padding-block: clamp(6rem, 12vw, 11rem);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .split,
+  .install-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(3rem, 8vw, 9rem);
+  }
+
+  .split h2,
+  .install h2,
+  .open-source h2 {
+    max-width: 650px;
+    margin: 0;
+    font-size: clamp(2.75rem, 5vw, 5rem);
+    font-weight: 500;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+
+  .copy {
+    max-width: 680px;
+  }
+
+  .copy p,
+  .open-source-copy p {
+    margin: 0 0 1.75rem;
+    color: var(--color-muted);
+    font-size: 1.08rem;
+    line-height: 1.75;
+  }
+
+  .copy .emphasis {
+    color: var(--color-foreground);
+    font-weight: 600;
+  }
+
+  .system {
+    padding-block: clamp(7rem, 14vw, 13rem);
+    background: var(--color-foreground);
+    color: var(--color-surface);
+  }
+
+  .system h2 {
+    max-width: 1050px;
+    margin: 0;
+    font-size: clamp(4rem, 9vw, 8rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 0.9;
+  }
+
+  .system-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: clamp(5rem, 10vw, 9rem);
+    border-top: 1px solid #303530;
+    border-bottom: 1px solid #303530;
+  }
+
+  .system-grid article {
+    padding: 2rem;
+  }
+
+  .system-grid article:first-child {
+    padding-left: 0;
+  }
+
+  .system-grid article + article {
+    border-left: 1px solid #303530;
+  }
+
+  .system-grid span {
+    color: #8b928d;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  .system-grid h3 {
+    margin: 3rem 0 0.75rem;
+    font-size: 1.4rem;
+  }
+
+  .system-grid p {
+    margin: 0;
+    color: #b8bdb9;
+    line-height: 1.7;
+  }
+
+  .principle-list {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .principle-list article {
+    padding-block: 2.25rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .principle-list h3 {
+    margin: 0;
+    font-size: 1.35rem;
+  }
+
+  .principle-list p {
+    max-width: 650px;
+    margin: 0.75rem 0 0;
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    margin-top: 4rem;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .metric-grid div {
+    display: flex;
+    min-height: 220px;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2rem;
+  }
+
+  .metric-grid div:first-child {
+    padding-left: 0;
+  }
+
+  .metric-grid div + div {
+    border-left: 1px solid var(--color-border);
+  }
+
+  .metric-grid strong {
+    font-size: 1.25rem;
+  }
+
+  .metric-grid span {
+    color: var(--color-muted);
+    line-height: 1.6;
+  }
+
+  .open-source {
+    background: var(--color-accent);
+    color: var(--color-surface);
+  }
+
+  .open-source-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: clamp(4rem, 10vw, 10rem);
+    padding-block: clamp(7rem, 14vw, 13rem);
+  }
+
+  .open-source-copy p {
+    color: #d0ded6;
+  }
+
+  .button-light {
+    border-color: var(--color-surface);
+    color: var(--color-surface);
+  }
+
+  .button-light:hover,
+  .button-light:focus-visible {
+    background: var(--color-surface);
+    color: var(--color-accent);
+  }
+
+  .install {
+    border-bottom: 0;
+  }
+
+  .command {
+    padding: 1.5rem 1.75rem;
+    background: var(--color-foreground);
+    color: var(--color-surface);
+    overflow-x: auto;
+  }
+
+  code {
+    font-family:
+      "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: clamp(1rem, 2vw, 1.15rem);
+  }
+
+  .install-note {
+    margin: 1rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 1000px) {
+    .system-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .system-grid article:nth-child(3) {
+      padding-left: 0;
+      border-top: 1px solid #303530;
+      border-left: 0;
+    }
+
+    .system-grid article:nth-child(4) {
+      border-top: 1px solid #303530;
+    }
+
+    .metric-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .metric-grid div {
+      min-height: auto;
+      padding: 2rem 0;
+    }
+
+    .metric-grid div + div {
+      border-top: 1px solid var(--color-border);
+      border-left: 0;
+    }
+  }
+
+  @media (max-width: 800px) {
+    .split,
+    .install-inner,
+    .open-source-inner {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .hero h1 {
+      font-size: clamp(3.25rem, 16vw, 5rem);
+    }
+
+    .actions {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .button {
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .system-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .system-grid article {
+      padding: 2rem 0;
+    }
+
+    .system-grid article + article {
+      border-top: 1px solid #303530;
+      border-left: 0;
+    }
+  }
+</style>
