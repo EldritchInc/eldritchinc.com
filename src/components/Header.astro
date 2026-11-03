@@ -1,14 +1,13 @@
 ---
+import { site } from "../data/site";
+
 const pathname = Astro.url.pathname;
 
 const navigation = [
   { href: "/azathoth", label: "Azathoth" },
+  { href: "/workwithus", label: "Work with us" },
   { href: "/about", label: "About" },
-  {
-    href: "https://github.com/EldritchInc",
-    label: "GitHub",
-    external: true,
-  },
+  { href: site.githubOrg, label: "GitHub", external: true },
   { href: "/contact", label: "Contact" },
 ];
 ---
@@ -37,10 +36,14 @@ const navigation = [
                   "nav-link",
                   {
                     active:
-                      !item.external &&
-                      pathname.startsWith(item.href),
+                      !item.external && pathname.startsWith(item.href),
                   },
                 ]}
+                aria-current={
+                  !item.external && pathname.startsWith(item.href)
+                    ? "page"
+                    : undefined
+                }
                 target={item.external ? "_blank" : undefined}
                 rel={item.external ? "noreferrer" : undefined}
               >
@@ -49,6 +52,11 @@ const navigation = [
             </li>
           ))
         }
+        <li>
+          <a class="nav-cta" href={site.booking} target="_blank" rel="noreferrer">
+            Book a review
+          </a>
+        </li>
       </ul>
     </nav>
   </div>
@@ -57,6 +65,7 @@ const navigation = [
 <style>
   .site-header {
     border-bottom: 1px solid var(--color-border);
+    background: var(--color-background);
   }
 
   .header-inner {
@@ -69,6 +78,7 @@ const navigation = [
 
   .brand {
     display: inline-flex;
+    flex-shrink: 0;
     align-items: center;
     gap: 0.8rem;
     color: var(--color-foreground);
@@ -88,7 +98,7 @@ const navigation = [
   nav ul {
     display: flex;
     align-items: center;
-    gap: clamp(1rem, 3vw, 2rem);
+    gap: clamp(1rem, 2.5vw, 2rem);
     padding: 0;
     margin: 0;
     list-style: none;
@@ -99,6 +109,7 @@ const navigation = [
     font-size: 0.9rem;
     font-weight: 500;
     text-decoration: none;
+    white-space: nowrap;
     transition: color 150ms ease;
   }
 
@@ -108,7 +119,26 @@ const navigation = [
     color: var(--color-foreground);
   }
 
-  @media (max-width: 700px) {
+  .nav-cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--color-accent);
+    color: var(--color-surface);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 150ms ease;
+  }
+
+  .nav-cta:hover,
+  .nav-cta:focus-visible {
+    background: var(--color-accent-hover);
+  }
+
+  @media (max-width: 860px) {
     .header-inner {
       align-items: flex-start;
       flex-direction: column;

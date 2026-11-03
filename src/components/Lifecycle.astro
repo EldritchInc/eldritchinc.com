@@ -1,0 +1,168 @@
+---
+// Stages flowing left to right, all writing to one shared evidence store.
+interface Stage {
+  name: string;
+  text: string;
+}
+
+interface Props {
+  stages: Stage[];
+  store?: string;
+  label: string;
+}
+
+const {
+  stages,
+  store = "Every stage writes to one append-only evidence store",
+  label,
+} = Astro.props;
+---
+
+<figure class="lifecycle" aria-label={label}>
+  <ol class="stages" style={`--count: ${stages.length}`}>
+    {
+      stages.map((stage, index) => (
+        <li class="stage">
+          <span class="stage-number">{String(index + 1).padStart(2, "0")}</span>
+          <h3>{stage.name}</h3>
+          <p>{stage.text}</p>
+          {index < stages.length - 1 && (
+            <span class="arrow" aria-hidden="true">→</span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="store">
+    <span class="store-lines" aria-hidden="true" style={`--count: ${stages.length}`}>
+      {stages.map(() => <span />)}
+    </span>
+    <p>{store}</p>
+  </div>
+</figure>
+
+<style>
+  .lifecycle {
+    margin: 0;
+  }
+
+  .stages {
+    display: grid;
+    grid-template-columns: repeat(var(--count), minmax(0, 1fr));
+    gap: 0;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-deep-border);
+  }
+
+  .stage {
+    position: relative;
+    padding: 2rem 1.75rem 2rem 0;
+  }
+
+  .stage + .stage {
+    padding-left: 1.75rem;
+    border-left: 1px solid var(--color-deep-border);
+  }
+
+  .stage-number {
+    color: var(--color-sage);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  .stage h3 {
+    margin: 2rem 0 0.75rem;
+    color: var(--color-surface);
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+
+  .stage p {
+    margin: 0;
+    color: var(--color-deep-muted);
+    font-size: 0.98rem;
+    line-height: 1.65;
+  }
+
+  .arrow {
+    position: absolute;
+    top: 1.65rem;
+    right: -0.6rem;
+    z-index: 1;
+    display: grid;
+    width: 1.2rem;
+    height: 1.2rem;
+    place-items: center;
+    background: var(--color-deep);
+    color: var(--color-signal);
+    font-size: 0.85rem;
+  }
+
+  .store {
+    margin-top: 0.5rem;
+  }
+
+  .store-lines {
+    display: grid;
+    grid-template-columns: repeat(var(--count, 3), 1fr);
+  }
+
+  .store-lines span {
+    height: 1.75rem;
+    margin-left: 1.75rem;
+    border-left: 1px dashed rgba(185, 227, 201, 0.45);
+  }
+
+  .store-lines span:first-child {
+    margin-left: 0.25rem;
+  }
+
+  .store p {
+    margin: 0;
+    padding: 1rem 1.25rem;
+    border: 1px solid rgba(185, 227, 201, 0.35);
+    background: rgba(185, 227, 201, 0.07);
+    color: var(--color-signal);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  @media (max-width: 900px) {
+    .stages {
+      grid-template-columns: 1fr;
+    }
+
+    .stage,
+    .stage + .stage {
+      padding: 1.75rem 0;
+      border-left: 0;
+      border-bottom: 1px solid var(--color-deep-border);
+    }
+
+    .stage h3 {
+      margin-top: 0.75rem;
+    }
+
+    .arrow {
+      top: auto;
+      right: auto;
+      bottom: -0.6rem;
+      left: 0;
+      transform: rotate(90deg);
+    }
+
+    .store-lines {
+      display: none;
+    }
+
+    .store {
+      margin-top: 1.5rem;
+    }
+  }
+</style>
+
