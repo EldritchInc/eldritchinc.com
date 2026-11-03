@@ -1,0 +1,682 @@
+---
+import Tendrils from "../components/Tendrils.astro";
+import Layout from "../layouts/Layout.astro";
+import { azathoth, offers, site } from "../data/site";
+
+const engagements = [
+  {
+    name: "Workflow Cost Audit",
+    length: "2 weeks · fixed price",
+    price: "$7,500",
+    featured: true,
+    summary:
+      "The place to start. We rebuild one of your AI workflows in Azathoth, build a benchmark from your real cases, and run optimization.",
+    includes: [
+      "Your workflow rebuilt and benchmarked on your own cases",
+      "Two or three cheaper options compared side by side",
+      "Measured quality, latency and cost for each",
+      "A written report and a walkthrough with your team",
+    ],
+  },
+  {
+    name: "Optimization Pilot",
+    length: "4–6 weeks · fixed price",
+    price: "$20,000",
+    featured: false,
+    summary:
+      "Everything in the audit, then the winning workflow running in production in your own AWS account.",
+    includes: [
+      "Everything in the Workflow Cost Audit",
+      "Deployment into your AWS account",
+      "Governed promotion and model failover set up",
+      "Your team trained to run and re-optimize it",
+    ],
+  },
+  {
+    name: "Re-optimization Retainer",
+    length: "Monthly",
+    price: "$2,000/mo",
+    featured: false,
+    summary:
+      "Models change every month. We keep your workflows on the best measured option as new ones arrive and old ones retire.",
+    includes: [
+      "Re-benchmarking when new models ship",
+      "Replacement plans when a model is deprecated",
+      "Priority support and upgrades",
+    ],
+  },
+];
+
+const extras = [
+  {
+    name: "Platform Team Workshop",
+    price: "$3,000",
+    text: "A hands-on half day on benchmarking and governed promotion of AI workflows.",
+  },
+  {
+    name: "Architecture advisory",
+    price: "$175/hr",
+    text: "A senior review of your AI systems, from model choice to deployment.",
+  },
+];
+
+const steps = [
+  {
+    name: "A 30-minute call",
+    text: "Free. You tell us what your AI workflows do and what hurts. No pitch deck.",
+  },
+  {
+    name: "A one-page proposal",
+    text: "Within 48 hours: your problem in your words, what we'll do, a timeline, and a fixed price.",
+  },
+  {
+    name: "The audit",
+    text: "We rebuild the workflow, benchmark it on your real cases, and search for cheaper options.",
+  },
+  {
+    name: "Your decision",
+    text: "You see the evidence and decide what, if anything, goes to production.",
+  },
+];
+
+const faqs = [
+  {
+    q: "You're one person. Is that a risk?",
+    a: "Azathoth is open source and runs in your own account, so you own everything we build together, whatever happens to us. Small also means fast: you talk directly to the engineer who built the engine.",
+  },
+  {
+    q: "We already use LangSmith or Langfuse.",
+    a: "Good. Those tools observe what your AI does. Azathoth benchmarks it, optimizes it and controls what reaches production. They work side by side, and Azathoth's tracing uses the OpenTelemetry standard.",
+  },
+  {
+    q: "Our security team won't let data leave our account.",
+    a: "With Amazon Bedrock, Azathoth runs inside your AWS account on models you've approved, and its records stay in your own database and storage. Tools only receive the credentials they explicitly declare, and traces never carry content.",
+  },
+  {
+    q: "We don't have budget for a big project.",
+    a: "That's why the audit is small and fixed-price. Many managers can approve it without a full procurement cycle. Tell us your sign-off limit and we'll scope to it.",
+  },
+  {
+    q: "What if we're not on AWS?",
+    a: "Azathoth runs anywhere Python or containers run, with SQLite or PostgreSQL, and reaches hundreds of models through OpenRouter. Our ready-made production template targets AWS.",
+  },
+  {
+    q: "Who owns what at the end?",
+    a: "You own your workflows, your benchmarks and your data. Eldritch owns Azathoth and its general improvements, which stay open source.",
+  },
+];
+---
+
+<Layout
+  title="Work with us"
+  description="Fixed-price engagements that make your AI workflows cheaper and prove quality held: a two-week Workflow Cost Audit, an Optimization Pilot, and a re-optimization retainer."
+>
+  <section class="hero section-dark">
+    <Tendrils />
+
+    <div class="site-container hero-inner">
+      <p class="eyebrow eyebrow-light">Work with us</p>
+
+      <h1 class="display">
+        Bring us one AI workflow.
+        <span class="signal">We'll make it cheaper, and prove it.</span>
+      </h1>
+
+      <p class="lede">
+        Fixed-price engagements built on Azathoth. We measure what your
+        workflow costs today, find cheaper options that score just as well
+        on your own cases, and hand you the evidence.
+      </p>
+
+      <div class="actions">
+        <a
+          class="button button-signal"
+          href={site.booking}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {site.bookingLabel}
+          <span aria-hidden="true">↗</span>
+        </a>
+
+        <a class="button button-ghost" href="#engagements">
+          See the engagements
+          <span aria-hidden="true">↓</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="engagements">
+    <div class="site-container">
+      <div class="split section-heading">
+        <div>
+          <p class="eyebrow">Engagements</p>
+          <h2 class="heading">Outcomes, at a fixed price.</h2>
+        </div>
+
+        <p class="lede">
+          You pay for a result, not for hours. Every engagement ends with
+          measured numbers you can check yourself.
+        </p>
+      </div>
+
+      <div class="offer-grid">
+        {
+          engagements.map((offer) => (
+            <article class:list={["offer", { featured: offer.featured }]}>
+              {offer.featured && <p class="badge">Start here</p>}
+              <h3>{offer.name}</h3>
+              <p class="length">{offer.length}</p>
+
+              {offers.showPrices && (
+                <p class="price">
+                  <span>Starting at</span>
+                  {offer.price}
+                </p>
+              )}
+
+              <p class="summary">{offer.summary}</p>
+
+              <ul>
+                {offer.includes.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+
+              <a
+                class:list={[
+                  "button",
+                  offer.featured ? "button-signal" : "button-secondary",
+                ]}
+                href={site.booking}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Talk about this
+                <span aria-hidden="true">↗</span>
+              </a>
+            </article>
+          ))
+        }
+      </div>
+
+      {
+        offers.showAuditGuarantee && (
+          <p class="guarantee">
+            <strong>Audit guarantee.</strong> If we don't find at least 20%
+            savings at equal measured quality, you pay half.
+          </p>
+        )
+      }
+
+      <div class="extras">
+        {
+          extras.map((extra) => (
+            <article>
+              <div>
+                <h3>{extra.name}</h3>
+                <p>{extra.text}</p>
+              </div>
+              {offers.showPrices && (
+                <p class="extra-price">
+                  <span>from</span> {extra.price}
+                </p>
+              )}
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-accent founding">
+    <div class="site-container split">
+      <div>
+        <p class="eyebrow eyebrow-light">Founding customers</p>
+        <h2 class="heading">The first three get a better deal.</h2>
+      </div>
+
+      <div class="prose">
+        <p>
+          Our first three customers receive up to 30% off any engagement.
+        </p>
+
+        <p class="emphasis">
+          In return, we ask for a named case study, your logo on this site,
+          and a short reference call when someone asks us how it went.
+        </p>
+
+        <div class="actions">
+          <a
+            class="button button-signal"
+            href={site.booking}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Claim a founding spot
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section process">
+    <div class="site-container">
+      <p class="eyebrow">How it goes</p>
+      <h2 class="heading">From first call to evidence.</h2>
+
+      <ol class="steps">
+        {
+          steps.map((step, index) => (
+            <li>
+              <span class="step-number">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <h3>{step.name}</h3>
+              <p>{step.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section faq">
+    <div class="site-container split">
+      <div>
+        <p class="eyebrow">Questions</p>
+        <h2 class="heading">The honest answers.</h2>
+      </div>
+
+      <div class="faq-list">
+        {
+          faqs.map((item) => (
+            <details>
+              <summary>{item.q}</summary>
+              <p>{item.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section open">
+    <div class="site-container split">
+      <div>
+        <p class="eyebrow">Prefer to do it yourself?</p>
+        <h2 class="heading">Azathoth is free.</h2>
+      </div>
+
+      <div class="prose">
+        <p>
+          The engine behind every engagement is open source. Install it and
+          explore on your own, and call us when you want a hand.
+        </p>
+
+        <div class="command" aria-label="Install command">
+          <code>pip install {azathoth.pypiName}</code>
+        </div>
+
+        <div class="actions">
+          <a class="text-link" href="/azathoth">
+            About Azathoth <span aria-hidden="true">→</span>
+          </a>
+          <a class="text-link" href={azathoth.repo} target="_blank" rel="noreferrer">
+            GitHub <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark closing">
+    <Tendrils side="left" />
+
+    <div class="site-container closing-inner">
+      <div>
+        <p class="eyebrow eyebrow-light">Next step</p>
+        <h2 class="heading">Thirty minutes. No pitch.</h2>
+        <p class="lede">
+          Tell us what your AI workflows do and what hurts. You'll leave the
+          call knowing whether an audit makes sense.
+        </p>
+      </div>
+
+      <div class="actions">
+        <a
+          class="button button-signal"
+          href={site.booking}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Book a review
+          <span aria-hidden="true">↗</span>
+        </a>
+
+        <a class="button button-ghost" href={`mailto:${site.email}`}>
+          Email instead
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-inner {
+    position: relative;
+    padding-block: clamp(6rem, 12vw, 11rem);
+  }
+
+  .hero .display {
+    max-width: 1050px;
+    font-size: clamp(3rem, 7vw, 6.5rem);
+  }
+
+  .signal {
+    display: block;
+    color: var(--color-signal);
+  }
+
+  .section-heading {
+    align-items: end;
+  }
+
+  .section-heading .lede {
+    margin: 0;
+  }
+
+  .offer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-top: clamp(3.5rem, 7vw, 6rem);
+  }
+
+  .offer {
+    display: flex;
+    flex-direction: column;
+    padding: 2.25rem 2rem 2rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .offer.featured {
+    border-color: var(--color-deep);
+    background: var(--color-deep);
+    color: var(--color-surface);
+  }
+
+  .badge {
+    align-self: flex-start;
+    margin: 0 0 1.25rem;
+    padding: 0.3rem 0.7rem;
+    background: var(--color-signal);
+    color: var(--color-deep);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .offer h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .length {
+    margin: 0.4rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .price {
+    display: flex;
+    flex-direction: column;
+    margin: 1.75rem 0 0;
+    font-size: 2.25rem;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+  }
+
+  .price span {
+    color: var(--color-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .summary {
+    margin: 1.5rem 0 0;
+    color: var(--color-muted);
+    line-height: 1.65;
+  }
+
+  .offer ul {
+    flex: 1;
+    padding: 0;
+    margin: 1.5rem 0 2rem;
+    list-style: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .offer li {
+    position: relative;
+    padding: 0.75rem 0 0.75rem 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .offer li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+
+  .featured .length,
+  .featured .price span,
+  .featured .summary {
+    color: var(--color-deep-muted);
+  }
+
+  .featured ul,
+  .featured li {
+    border-color: var(--color-deep-border);
+  }
+
+  .featured li::before {
+    color: var(--color-signal);
+  }
+
+  .guarantee {
+    margin: 2rem 0 0;
+    padding: 1.25rem 1.5rem;
+    border-left: 3px solid var(--color-accent);
+    background: var(--color-surface);
+  }
+
+  .extras {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-top: 1.25rem;
+  }
+
+  .extras article {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 1.5rem 2rem;
+    border: 1px solid var(--color-border);
+  }
+
+  .extras h3 {
+    margin: 0 0 0.35rem;
+    font-size: 1.1rem;
+  }
+
+  .extras article p {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.95rem;
+  }
+
+  .extras .extra-price {
+    flex-shrink: 0;
+    color: var(--color-foreground);
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .extra-price span {
+    color: var(--color-muted);
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding: 0;
+    margin: clamp(3.5rem, 7vw, 6rem) 0 0;
+    list-style: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .steps li {
+    padding: 2rem 1.75rem 0 0;
+  }
+
+  .steps li + li {
+    padding-left: 1.75rem;
+    border-left: 1px solid var(--color-border);
+  }
+
+  .step-number {
+    color: var(--color-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  .steps h3 {
+    margin: 2rem 0 0.75rem;
+    font-size: 1.3rem;
+  }
+
+  .steps p {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.65;
+  }
+
+  .faq-list {
+    border-top: 1px solid var(--color-border);
+  }
+
+  details {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 1.5rem;
+    cursor: pointer;
+    font-size: 1.15rem;
+    font-weight: 600;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    content: "+";
+    color: var(--color-accent);
+    font-size: 1.4rem;
+    line-height: 1;
+  }
+
+  details[open] summary::after {
+    content: "–";
+  }
+
+  details p {
+    max-width: 640px;
+    margin: 0 0 1.75rem;
+    color: var(--color-muted);
+    line-height: 1.75;
+  }
+
+  .open .command {
+    margin-top: 0.5rem;
+  }
+
+  .open .actions {
+    gap: 2rem;
+  }
+
+  .closing .closing-inner {
+    position: relative;
+  }
+
+  .closing .lede {
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 1000px) {
+    .offer-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .steps {
+      grid-template-columns: 1fr 1fr;
+      row-gap: 2.5rem;
+    }
+
+    .steps li:nth-child(3) {
+      padding-left: 0;
+      border-left: 0;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .extras {
+      grid-template-columns: 1fr;
+    }
+
+    .extras article {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .steps {
+      grid-template-columns: 1fr;
+    }
+
+    .steps li,
+    .steps li + li {
+      padding: 1.75rem 0 0;
+      border-left: 0;
+    }
+
+    .steps h3 {
+      margin-top: 0.75rem;
+    }
+  }
+</style>
