@@ -1,31 +1,156 @@
 ---
+import Lifecycle from "../components/Lifecycle.astro";
+import Tendrils from "../components/Tendrils.astro";
 import Layout from "../layouts/Layout.astro";
+import { azathoth, site } from "../data/site";
+
+const lifecycle = [
+  { name: "Compose", text: "Workflows are plain documents of steps and tools. No application code." },
+  { name: "Run", text: "The engine runs every step itself and records exactly what each model saw." },
+  { name: "Benchmark", text: "Score the workflow against your real cases for quality, speed and cost." },
+  { name: "Optimize", text: "Try cheaper compatible models, step by step. Evidence picks the winner." },
+  { name: "Promote", text: "Deliberately make the winner the production version, with an audit record." },
+  { name: "Invoke", text: "Production runs exactly what was promoted. Nothing more, nothing less." },
+];
+
+const roles = [
+  {
+    who: "Developers",
+    does: "build tools",
+    text: "Tools are versioned capabilities with clear inputs and outputs: Python, or any command. Built once, reused everywhere.",
+  },
+  {
+    who: "Domain experts",
+    does: "compose workflows",
+    text: "Experts and analysts assemble workflows from those tools as plain JSON documents, then test them, without writing code.",
+  },
+  {
+    who: "Platform teams",
+    does: "run the show",
+    text: "Run, benchmark, optimize, promote and operate everything from the command line, like any other production service.",
+  },
+];
+
+const features = [
+  {
+    area: "Composition",
+    items: [
+      "Steps that run in parallel, with results recorded in a fixed order",
+      "Routing on conditions, so each case goes to the right specialist",
+      "Retries, fallbacks and failure policies per step",
+      "Workflows that call, loop over, and fan out to other workflows",
+    ],
+  },
+  {
+    area: "Models",
+    items: [
+      "Hundreds of models through OpenRouter, plus Amazon Bedrock",
+      "An approved model list your organization controls",
+      "Mix models step by step: the cheap one where it's enough",
+      "Explicit failover to named substitutes if a model goes offline",
+    ],
+  },
+  {
+    area: "Evaluation",
+    items: [
+      "Benchmarks built from real cases, versioned like code",
+      "Four ways to score: exact, normalized, schema, or AI judge",
+      "Thumbs-up and thumbs-down feedback on real runs",
+      "Failed runs score zero, so broken never looks cheap",
+    ],
+  },
+  {
+    area: "Optimization",
+    items: [
+      "Searches for strictly cheaper models that hold quality",
+      "Keeps today's version in every round for a fair comparison",
+      "Every experiment saved for inspection",
+      "Never deploys on its own. Promotion is always explicit",
+    ],
+  },
+  {
+    area: "Production",
+    items: [
+      "A versioned JSON job interface: one request in, one result out",
+      "Idempotent invocations, so retries never double-run",
+      "Interrupted runs resume where they stopped",
+      "Files of any size, split and processed in parallel",
+    ],
+  },
+  {
+    area: "Operations",
+    items: [
+      "62 commands: everything is operable from bash",
+      "Append-only history; revert by re-importing",
+      "SQLite on a laptop, PostgreSQL in production",
+      "OpenTelemetry tracing that never carries content",
+    ],
+  },
+];
+
+const examples = [
+  { name: "Code review", text: "Three reviewers run at once (security, correctness, readability), and a lead reviewer steps in only when there are findings." },
+  { name: "Ticket triage", text: "Each ticket is routed to exactly one of four specialists, policy-checked, and escalated to a stronger model when confidence is low." },
+  { name: "Novel writer", text: "Plans, outlines and writes a book, each chapter through its own edit-and-verify loop until the story ends." },
+  { name: "Workflow writer", text: "A workflow that writes, and validates, new Azathoth workflows." },
+  { name: "Large files", text: "Counts words across a file of any size in S3 by splitting it and processing the pieces in parallel." },
+  { name: "The basics", text: "Prompts, sentiment, redundant producers, loops and maps: small examples to learn from." },
+];
+
+const comparison = [
+  ["The engine owns the flow; models only answer prompts", "The model drives the loop as an agent"],
+  ["Workflows composed as documents from tools", "Workflows written as application code"],
+  ["Every step recorded: model, tokens, cost, attempts", "Logs, if someone added them"],
+  ["Benchmarks, judges and optimization built in", "Separate evaluation tools, bolted on"],
+  ["Changes proven on a benchmark before promotion", "Prompt and model swaps go straight to production"],
+  ["Mix models per step, with explicit failover", "One provider per app; an outage means downtime"],
+  ["Interrupted runs resume from a journal", "Restart from scratch"],
+  ["Same engine on a laptop and on AWS", "Separate stories for development and the cloud"],
+];
+
+const roadmap = [
+  { name: "Azathoth-MCP", text: "Expose your production workflows to AI agents over the Model Context Protocol." },
+  { name: "PDF and multimodal input", text: "Starting with PDFs in 1.2." },
+  { name: "Cthulhu", text: "A paid optimizer that improves prompts, structure and escalation, not just model choice." },
+  { name: "A visual interface", text: "Compose and test workflows without the command line." },
+];
 ---
 
 <Layout
   title="Azathoth"
-  description="Azathoth is an open-source framework for constructing, evaluating, and optimizing AI systems."
+  description={`Azathoth ${azathoth.version} is an open-source engine that runs AI workflows as versioned specifications and improves them only from evidence. Runs on a laptop or in your own AWS account.`}
 >
-  <section class="hero">
-    <div class="site-container">
-      <p class="eyebrow">Azathoth</p>
+  <section class="hero section-dark">
+    <Tendrils />
 
-      <h1>
-        Build AI systems
-        that can measure
-        and improve themselves.
+    <div class="site-container hero-inner">
+      <p class="pill">Version {azathoth.version} · “{azathoth.releaseName}”</p>
+
+      <h1 class="display">
+        Take your AI workflows back
+        <span class="signal">from the providers.</span>
       </h1>
 
       <p class="lede">
-        Azathoth is an open-source framework for constructing,
-        evaluating, and optimizing multi-model AI systems across
-        quality, reliability, latency, cost, and capability.
+        Azathoth is an open-source engine that runs AI workflows as durable,
+        versioned specifications, and improves them only from evidence.
+        You own the workflow. Every change is proven before it ships.
       </p>
 
       <div class="actions">
         <a
-          class="button button-primary"
-          href="https://github.com/EldritchInc/azathoth"
+          class="button button-signal"
+          href={site.booking}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {site.bookingLabel}
+          <span aria-hidden="true">↗</span>
+        </a>
+
+        <a
+          class="button button-ghost"
+          href={azathoth.repo}
           target="_blank"
           rel="noreferrer"
         >
@@ -33,202 +158,291 @@ import Layout from "../layouts/Layout.astro";
           <span aria-hidden="true">↗</span>
         </a>
       </div>
+
+      <p class="hero-install">
+        <code>pip install {azathoth.pypiName}</code>
+      </p>
     </div>
   </section>
 
-  <section class="problem">
+  <section class="section">
     <div class="site-container split">
       <div>
-        <p class="eyebrow">Why Azathoth exists</p>
-        <h2>
-          AI software has become
-          too complex to tune by hand.
-        </h2>
+        <p class="eyebrow">The bet</p>
+        <h2 class="heading">Models answer prompts. The engine does the rest.</h2>
       </div>
 
-      <div class="copy">
+      <div class="prose">
         <p>
-          Modern AI systems are assembled from models, prompts, tools,
-          context, retrieval, memory, evaluators, and multi-step workflows.
+          In most AI systems, the model drives: it decides what to do next,
+          calls tools, and talks to the user. That makes it hard to see what
+          happened, harder to swap models, and impossible to measure.
         </p>
 
         <p>
-          Every choice creates another dimension in the search space.
-          Which model should run this step? Which prompt performs best?
-          Which configuration meets the quality requirement without
-          wasting latency or money?
+          Azathoth flips that. The engine holds the full context, runs the
+          tools itself, and gives each model only what its step needs.
+          Models never act as agents and never change the workflow.
         </p>
 
         <p class="emphasis">
-          Azathoth treats those questions as engineering problems that
-          can be measured experimentally instead of answered by intuition.
+          So every step is observable, swappable and measurable, and that
+          is what makes evidence-driven optimization possible.
         </p>
       </div>
     </div>
   </section>
 
-  <section class="system">
+  <section class="section section-dark">
     <div class="site-container">
-      <p class="eyebrow eyebrow-light">The system</p>
+      <div class="block-heading">
+        <p class="eyebrow eyebrow-light">How it works</p>
+        <h2 class="heading">Six stages. One record of everything.</h2>
+        <p class="lede">
+          Each stage is kept separate: a specification never mixes with its
+          evidence, and nothing but promotion grants production authority.
+          Every value a step saw can be traced to the step that produced it.
+        </p>
+      </div>
 
-      <h2>
-        Construct.
-        Evaluate.
-        Optimize.
-      </h2>
+      <Lifecycle
+        stages={lifecycle}
+        label="Compose, run, benchmark, optimize, promote, invoke: every stage writes to one evidence store"
+      />
+    </div>
+  </section>
 
-      <div class="system-grid">
-        <article>
-          <span>01</span>
-          <h3>Construct</h3>
-          <p>
-            Define explicit workflows made from models, prompts, tools,
-            context, and execution steps.
-          </p>
-        </article>
+  <section class="section">
+    <div class="site-container">
+      <p class="eyebrow">Who does what</p>
+      <h2 class="heading narrow">AI work moves out of application code and into operations.</h2>
 
-        <article>
-          <span>02</span>
-          <h3>Execute</h3>
-          <p>
-            Run workflows through provider-neutral abstractions with
-            step-scoped model and tool bindings.
-          </p>
-        </article>
-
-        <article>
-          <span>03</span>
-          <h3>Evaluate</h3>
-          <p>
-            Measure outcomes against explicit goals and collect repeatable
-            evidence about quality, reliability, latency, and cost.
-          </p>
-        </article>
-
-        <article>
-          <span>04</span>
-          <h3>Optimize</h3>
-          <p>
-            Compare candidates and search for configurations that produce
-            better system-level tradeoffs.
-          </p>
-        </article>
+      <div class="roles">
+        {
+          roles.map((role) => (
+            <article>
+              <p class="role-who">{role.who}</p>
+              <h3>{role.does}</h3>
+              <p>{role.text}</p>
+            </article>
+          ))
+        }
       </div>
     </div>
   </section>
 
-  <section class="principles">
+  <section class="section features">
+    <div class="site-container">
+      <div class="split block-split">
+        <div>
+          <p class="eyebrow">What ships in {azathoth.version}</p>
+          <h2 class="heading">Production-ready, today.</h2>
+        </div>
+
+        <p class="lede">
+          Everything below is in the current release, open source and
+          installable now.
+        </p>
+      </div>
+
+      <div class="feature-grid">
+        {
+          features.map((group) => (
+            <article>
+              <h3>{group.area}</h3>
+              <ul>
+                {group.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-accent aws">
     <div class="site-container split">
       <div>
-        <p class="eyebrow">Architecture</p>
-
-        <h2>
-          Built for systems,
-          not isolated prompts.
-        </h2>
+        <p class="eyebrow eyebrow-light">First-class on AWS</p>
+        <h2 class="heading">A better home for AI workflows than Step Functions.</h2>
       </div>
 
-      <div class="principle-list">
-        <article>
-          <h3>Provider-neutral</h3>
-          <p>
-            Models are capabilities, not architecture. Azathoth separates
-            workflow behavior from individual model providers.
-          </p>
-        </article>
+      <div class="prose">
+        <p>
+          One CloudFormation template deploys Azathoth to AWS Fargate with
+          job queues, an encrypted evidence bucket, least-privilege access,
+          Secrets Manager and autoscaling workers.
+        </p>
 
-        <article>
-          <h3>Goal-directed</h3>
-          <p>
-            Evaluation begins with explicit goals so optimization has a
-            definition of better.
-          </p>
-        </article>
+        <p>
+          It works natively with Amazon Bedrock, SQS, S3 and PostgreSQL on
+          RDS, and adds what Step Functions doesn't have: model choice,
+          benchmarking and optimization.
+        </p>
 
-        <article>
-          <h3>Workflow-native</h3>
-          <p>
-            AI applications are multi-step software systems. Azathoth
-            represents and evaluates them that way.
-          </p>
-        </article>
-
-        <article>
-          <h3>Evidence-driven</h3>
-          <p>
-            Decisions are based on measured runs, experiments, and
-            scorecards rather than assumptions about which model or prompt
-            should perform best.
-          </p>
-        </article>
+        <ul class="aws-list">
+          <li>Fargate</li>
+          <li>Bedrock</li>
+          <li>SQS</li>
+          <li>S3</li>
+          <li>Secrets Manager</li>
+          <li>RDS PostgreSQL</li>
+        </ul>
       </div>
     </div>
   </section>
 
-  <section class="metrics">
+  <section class="section">
     <div class="site-container">
-      <p class="eyebrow">Optimization dimensions</p>
+      <p class="eyebrow">The difference</p>
+      <h2 class="heading narrow">Measurement, versioning and deployment are part of the architecture.</h2>
 
-      <div class="metric-grid">
-        <div>
-          <strong>Quality</strong>
-          <span>Does the system produce the right result?</span>
-        </div>
-
-        <div>
-          <strong>Reliability</strong>
-          <span>Does it keep producing acceptable results?</span>
-        </div>
-
-        <div>
-          <strong>Latency</strong>
-          <span>How quickly can the workflow complete?</span>
-        </div>
-
-        <div>
-          <strong>Cost</strong>
-          <span>What does the system consume to produce the result?</span>
-        </div>
-
-        <div>
-          <strong>Capability</strong>
-          <span>What can the system successfully accomplish?</span>
-        </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Azathoth</th>
+              <th scope="col">The typical alternative</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              comparison.map(([ours, theirs]) => (
+                <tr>
+                  <td>{ours}</td>
+                  <td>{theirs}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
 
-  <section class="open-source">
-    <div class="site-container open-source-inner">
-      <div>
-        <p class="eyebrow eyebrow-light">Open source</p>
+  <section class="section">
+    <div class="site-container">
+      <div class="split block-split">
+        <div>
+          <p class="eyebrow">Examples that ship</p>
+          <h2 class="heading">See it work.</h2>
+        </div>
 
-        <h2>
-          Built in public.
-          Designed to evolve.
-        </h2>
+        <p class="lede">
+          Real, runnable workflows come in the box, from small learning
+          examples to a workflow that writes other workflows.
+        </p>
       </div>
 
-      <div class="open-source-copy">
-        <p>
-          Azathoth is being developed as open-source infrastructure for
-          engineers building complex AI systems.
-        </p>
+      <div class="example-grid">
+        {
+          examples.map((example) => (
+            <article>
+              <h3>{example.name}</h3>
+              <p>{example.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
 
-        <p>
-          The project is designed around explicit architecture, strict
-          typing, repeatable evaluation, and a test-driven development
-          process.
+  <section class="section section-dark rule">
+    <Tendrils side="left" />
+
+    <div class="site-container rule-inner">
+      <p class="eyebrow eyebrow-light">The operating rule</p>
+      <blockquote>
+        Configure explicitly. Execute empirically. Optimize without hidden
+        deployment. Promote deliberately. Invoke exactly what production
+        state says to invoke.
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="site-container split">
+      <div>
+        <p class="eyebrow">Coming next</p>
+        <h2 class="heading">Where Azathoth is headed.</h2>
+        <p class="lede">
+          Planned, not yet released. Follow along on GitHub.
         </p>
+      </div>
+
+      <div class="roadmap">
+        {
+          roadmap.map((item) => (
+            <article>
+              <p class="soon">Coming</p>
+              <h3>{item.name}</h3>
+              <p>{item.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section get-started">
+    <div class="site-container split">
+      <div>
+        <p class="eyebrow">Get started</p>
+        <h2 class="heading">Install in one line.</h2>
+
+        <p class="lede">
+          Built in public, solo, from August 1, 2026 to {azathoth.version}
+          in about three months, with 110 architecture decision records
+          and every provider faked in tests.
+        </p>
+      </div>
+
+      <div class="install">
+        <div class="command" aria-label="Install command">
+          <code>pip install {azathoth.pypiName}</code>
+        </div>
+
+        <dl class="facts">
+          <div>
+            <dt>Optional extras</dt>
+            <dd>
+              {azathoth.extras.map((extra) => <code>[{extra}]</code>)}
+            </dd>
+          </div>
+          <div>
+            <dt>Container</dt>
+            <dd><code>{azathoth.image}</code></dd>
+          </div>
+          <div>
+            <dt>Platforms</dt>
+            <dd>macOS, Linux, Windows · Python up to 3.13</dd>
+          </div>
+          <div>
+            <dt>Storage</dt>
+            <dd>SQLite by default, PostgreSQL 15+</dd>
+          </div>
+        </dl>
 
         <div class="actions">
           <a
-            class="button button-light"
-            href="https://github.com/EldritchInc/azathoth"
+            class="button button-primary"
+            href={azathoth.repo}
             target="_blank"
             rel="noreferrer"
           >
-            Explore the repository
+            Read the docs on GitHub
+            <span aria-hidden="true">↗</span>
+          </a>
+
+          <a
+            class="button button-secondary"
+            href={azathoth.pypiUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
+            PyPI
             <span aria-hidden="true">↗</span>
           </a>
         </div>
@@ -236,376 +450,328 @@ import Layout from "../layouts/Layout.astro";
     </div>
   </section>
 
-  <section class="install">
-    <div class="site-container install-inner">
-      <div>
-        <p class="eyebrow">Get started</p>
+  <section class="section section-dark closing">
+    <Tendrils />
 
-        <h2>
-          Azathoth is coming
-          to Python.
-        </h2>
+    <div class="site-container closing-inner">
+      <div>
+        <p class="eyebrow eyebrow-light">Want a hand?</p>
+        <h2 class="heading">We'll put Azathoth to work on your workflow.</h2>
       </div>
 
-      <div>
-        <div class="command" aria-label="Azathoth installation command">
-          <code>pip install azathoth</code>
-        </div>
-
-        <p class="install-note">
-          The initial open-source release is coming soon.
-        </p>
+      <div class="actions">
+        <a class="button button-signal" href="/workwithus">
+          Work with us
+          <span aria-hidden="true">→</span>
+        </a>
       </div>
     </div>
   </section>
 </Layout>
 
 <style>
-  .hero {
-    padding-block: clamp(6rem, 13vw, 12rem);
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .eyebrow {
-    margin: 0 0 1.5rem;
-    color: var(--color-accent);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-  }
-
-  .eyebrow-light {
-    color: #9dbbac;
-  }
-
-  .hero h1 {
-    max-width: 1050px;
-    margin: 0;
-    font-size: clamp(3.5rem, 8vw, 7.5rem);
-    font-weight: 600;
-    letter-spacing: -0.06em;
-    line-height: 0.93;
-  }
-
-  .lede {
-    max-width: 760px;
-    margin: 2.5rem 0 0;
-    color: var(--color-muted);
-    font-size: clamp(1.1rem, 2vw, 1.35rem);
-    line-height: 1.65;
-  }
-
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 2.5rem;
-  }
-
-  .button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.8rem;
-    min-height: 3.25rem;
-    padding: 0.75rem 1.25rem;
-    border: 1px solid var(--color-foreground);
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition:
-      background-color 150ms ease,
-      color 150ms ease,
-      border-color 150ms ease;
-  }
-
-  .button-primary {
-    background: var(--color-foreground);
-    color: var(--color-surface);
-  }
-
-  .button-primary:hover,
-  .button-primary:focus-visible {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
-  }
-
-  .button-secondary {
-    background: transparent;
-    color: var(--color-foreground);
-  }
-
-  .button-secondary:hover,
-  .button-secondary:focus-visible {
-    background: var(--color-foreground);
-    color: var(--color-surface);
-  }
-
-  .problem,
-  .principles,
-  .metrics,
-  .install {
+  .hero-inner {
+    position: relative;
     padding-block: clamp(6rem, 12vw, 11rem);
-    border-bottom: 1px solid var(--color-border);
   }
 
-  .split,
-  .install-inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(3rem, 8vw, 9rem);
-  }
-
-  .split h2,
-  .install h2,
-  .open-source h2 {
-    max-width: 650px;
-    margin: 0;
-    font-size: clamp(2.75rem, 5vw, 5rem);
-    font-weight: 500;
-    letter-spacing: -0.05em;
-    line-height: 1;
-  }
-
-  .copy {
-    max-width: 680px;
-  }
-
-  .copy p,
-  .open-source-copy p {
-    margin: 0 0 1.75rem;
-    color: var(--color-muted);
-    font-size: 1.08rem;
-    line-height: 1.75;
-  }
-
-  .copy .emphasis {
-    color: var(--color-foreground);
-    font-weight: 600;
-  }
-
-  .system {
-    padding-block: clamp(7rem, 14vw, 13rem);
-    background: var(--color-foreground);
-    color: var(--color-surface);
-  }
-
-  .system h2 {
+  .hero .display {
     max-width: 1050px;
-    margin: 0;
-    font-size: clamp(4rem, 9vw, 8rem);
-    font-weight: 500;
-    letter-spacing: -0.06em;
-    line-height: 0.9;
+    margin-top: 2.25rem;
+    font-size: clamp(3rem, 7.5vw, 7rem);
   }
 
-  .system-grid {
+  .signal {
+    display: block;
+    color: var(--color-signal);
+  }
+
+  .hero-install {
+    margin: 2.5rem 0 0;
+    color: var(--color-sage);
+    font-size: 0.95rem;
+  }
+
+  .hero-install code::before {
+    content: "$ ";
+    opacity: 0.6;
+  }
+
+  .block-heading {
+    max-width: 840px;
+    margin-bottom: clamp(3.5rem, 7vw, 6rem);
+  }
+
+  .block-split {
+    align-items: end;
+  }
+
+  .block-split .lede {
+    margin: 0;
+  }
+
+  .narrow {
+    max-width: 900px;
+  }
+
+  .roles {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    margin-top: clamp(5rem, 10vw, 9rem);
-    border-top: 1px solid #303530;
-    border-bottom: 1px solid #303530;
-  }
-
-  .system-grid article {
-    padding: 2rem;
-  }
-
-  .system-grid article:first-child {
-    padding-left: 0;
-  }
-
-  .system-grid article + article {
-    border-left: 1px solid #303530;
-  }
-
-  .system-grid span {
-    color: #8b928d;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-  }
-
-  .system-grid h3 {
-    margin: 3rem 0 0.75rem;
-    font-size: 1.4rem;
-  }
-
-  .system-grid p {
-    margin: 0;
-    color: #b8bdb9;
-    line-height: 1.7;
-  }
-
-  .principle-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: clamp(3.5rem, 7vw, 6rem);
     border-top: 1px solid var(--color-border);
   }
 
-  .principle-list article {
-    padding-block: 2.25rem;
-    border-bottom: 1px solid var(--color-border);
+  .roles article {
+    padding: 2rem 2rem 0 0;
   }
 
-  .principle-list h3 {
-    margin: 0;
-    font-size: 1.35rem;
-  }
-
-  .principle-list p {
-    max-width: 650px;
-    margin: 0.75rem 0 0;
-    color: var(--color-muted);
-    line-height: 1.7;
-  }
-
-  .metric-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    margin-top: 4rem;
-    border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .metric-grid div {
-    display: flex;
-    min-height: 220px;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 2rem;
-  }
-
-  .metric-grid div:first-child {
-    padding-left: 0;
-  }
-
-  .metric-grid div + div {
+  .roles article + article {
+    padding-left: 2rem;
     border-left: 1px solid var(--color-border);
   }
 
-  .metric-grid strong {
+  .role-who {
+    margin: 0;
+    color: var(--color-accent);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .roles h3 {
+    margin: 0.5rem 0 1rem;
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+  }
+
+  .roles p:last-child,
+  .example-grid p,
+  .roadmap p:last-child {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-top: clamp(3.5rem, 7vw, 6rem);
+  }
+
+  .feature-grid article {
+    padding: 2rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .feature-grid h3,
+  .example-grid h3,
+  .roadmap h3 {
+    margin: 0 0 1rem;
     font-size: 1.25rem;
   }
 
-  .metric-grid span {
+  .feature-grid ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .feature-grid li {
+    position: relative;
+    padding: 0.55rem 0 0.55rem 1.4rem;
     color: var(--color-muted);
-    line-height: 1.6;
+    font-size: 0.95rem;
+    line-height: 1.55;
   }
 
-  .open-source {
-    background: var(--color-accent);
-    color: var(--color-surface);
-  }
-
-  .open-source-inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-    gap: clamp(4rem, 10vw, 10rem);
-    padding-block: clamp(7rem, 14vw, 13rem);
-  }
-
-  .open-source-copy p {
-    color: #d0ded6;
-  }
-
-  .button-light {
-    border-color: var(--color-surface);
-    color: var(--color-surface);
-  }
-
-  .button-light:hover,
-  .button-light:focus-visible {
-    background: var(--color-surface);
+  .feature-grid li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
     color: var(--color-accent);
+    font-weight: 700;
   }
 
-  .install {
-    border-bottom: 0;
+  .aws-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    padding: 0;
+    margin: 2rem 0 0;
+    list-style: none;
   }
 
-  .command {
-    padding: 1.5rem 1.75rem;
-    background: var(--color-foreground);
+  .aws-list li {
+    padding: 0.45rem 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.25);
     color: var(--color-surface);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .table-wrap {
+    margin-top: clamp(3rem, 6vw, 5rem);
     overflow-x: auto;
   }
 
-  code {
-    font-family:
-      "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-    font-size: clamp(1rem, 2vw, 1.15rem);
+  table {
+    width: 100%;
+    border-collapse: collapse;
   }
 
-  .install-note {
-    margin: 1rem 0 0;
+  th {
+    padding: 0 1.5rem 1rem 0;
     color: var(--color-muted);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-align: left;
+    text-transform: uppercase;
   }
 
-  @media (max-width: 1000px) {
-    .system-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
+  th:first-child {
+    color: var(--color-accent);
+  }
 
-    .system-grid article:nth-child(3) {
-      padding-left: 0;
-      border-top: 1px solid #303530;
-      border-left: 0;
-    }
+  td {
+    width: 50%;
+    padding: 1.15rem 1.5rem 1.15rem 0;
+    border-top: 1px solid var(--color-border);
+    line-height: 1.5;
+    vertical-align: top;
+  }
 
-    .system-grid article:nth-child(4) {
-      border-top: 1px solid #303530;
-    }
+  td:first-child {
+    font-weight: 600;
+  }
 
-    .metric-grid {
+  td:last-child {
+    color: var(--color-muted);
+  }
+
+  td:first-child::before {
+    content: "✓ ";
+    color: var(--color-accent);
+  }
+
+  .example-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: clamp(3.5rem, 7vw, 6rem);
+    border-top: 1px solid var(--color-border);
+    border-left: 1px solid var(--color-border);
+  }
+
+  .example-grid article {
+    padding: 2rem;
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .rule-inner {
+    position: relative;
+  }
+
+  blockquote {
+    max-width: 1000px;
+    margin: 0;
+    font-size: clamp(2rem, 4.5vw, 4rem);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+  }
+
+  .roadmap {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .roadmap article {
+    padding-block: 1.75rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .soon {
+    display: inline-block;
+    margin: 0 0 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--color-border);
+    color: var(--color-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .roadmap h3 {
+    margin-bottom: 0.5rem;
+  }
+
+  .facts {
+    margin: 2rem 0 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .facts div {
+    display: grid;
+    grid-template-columns: 9rem 1fr;
+    gap: 1rem;
+    padding-block: 0.9rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  dt {
+    color: var(--color-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  dd {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+  }
+
+  .install .actions {
+    margin-top: 2rem;
+  }
+
+  .closing .closing-inner {
+    position: relative;
+  }
+
+  @media (max-width: 900px) {
+    .roles,
+    .feature-grid,
+    .example-grid {
       grid-template-columns: 1fr;
     }
 
-    .metric-grid div {
-      min-height: auto;
-      padding: 2rem 0;
-    }
-
-    .metric-grid div + div {
-      border-top: 1px solid var(--color-border);
+    .roles article,
+    .roles article + article {
+      padding: 1.75rem 0;
       border-left: 0;
+      border-bottom: 1px solid var(--color-border);
     }
   }
 
-  @media (max-width: 800px) {
-    .split,
-    .install-inner,
-    .open-source-inner {
-      grid-template-columns: 1fr;
+  @media (min-width: 601px) and (max-width: 900px) {
+    .feature-grid,
+    .example-grid {
+      grid-template-columns: 1fr 1fr;
     }
   }
 
   @media (max-width: 600px) {
-    .hero h1 {
-      font-size: clamp(3.25rem, 16vw, 5rem);
-    }
-
-    .actions {
-      align-items: stretch;
-      flex-direction: column;
-    }
-
-    .button {
-      justify-content: space-between;
-      width: 100%;
-    }
-
-    .system-grid {
+    .facts div {
       grid-template-columns: 1fr;
-    }
-
-    .system-grid article {
-      padding: 2rem 0;
-    }
-
-    .system-grid article + article {
-      border-top: 1px solid #303530;
-      border-left: 0;
+      gap: 0.25rem;
     }
   }
 </style>

@@ -1,0 +1,102 @@
+---
+// Decorative tentacle-line motif for dark sections. Purely visual.
+interface Props {
+  side?: "right" | "left";
+}
+
+const { side = "right" } = Astro.props;
+---
+
+<svg
+  class:list={["tendrils", side]}
+  viewBox="0 0 600 700"
+  aria-hidden="true"
+  focusable="false"
+>
+  <g class="sway sway-a">
+    <path d="M620 40 C 470 120, 520 260, 400 330 S 250 470, 300 640" />
+    <path d="M620 90 C 500 170, 540 300, 430 370 S 300 500, 350 690" />
+  </g>
+  <g class="sway sway-b">
+    <path d="M620 210 C 520 250, 470 330, 500 420 S 430 590, 330 620" />
+    <path d="M620 260 C 540 300, 510 370, 540 450 S 480 610, 390 660" />
+    <circle cx="330" cy="620" r="3" />
+    <circle cx="390" cy="660" r="2.5" />
+  </g>
+  <g class="sway sway-c">
+    <path d="M620 400 C 560 430, 560 500, 590 560 S 560 660, 480 700" />
+    <circle cx="300" cy="640" r="3.5" />
+    <circle cx="350" cy="690" r="2.5" />
+  </g>
+</svg>
+
+<style>
+  .tendrils {
+    position: absolute;
+    top: 0;
+    width: min(56vw, 720px);
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.55;
+  }
+
+  .right {
+    right: 0;
+  }
+
+  .left {
+    left: 0;
+    transform: scaleX(-1);
+  }
+
+  path {
+    fill: none;
+    stroke: var(--color-signal);
+    stroke-linecap: round;
+    stroke-width: 1.25;
+    opacity: 0.35;
+  }
+
+  circle {
+    fill: var(--color-signal);
+    opacity: 0.45;
+  }
+
+  .sway {
+    transform-origin: 100% 0%;
+    animation: sway 18s ease-in-out infinite alternate;
+  }
+
+  .sway-b {
+    animation-duration: 23s;
+    animation-delay: -6s;
+  }
+
+  .sway-c {
+    animation-duration: 29s;
+    animation-delay: -11s;
+  }
+
+  @keyframes sway {
+    from {
+      transform: rotate(-1.6deg);
+    }
+
+    to {
+      transform: rotate(2.2deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sway {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .tendrils {
+      width: 90vw;
+      opacity: 0.3;
+    }
+  }
+</style>

@@ -1,10 +1,19 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { azathoth, site } from "../data/site";
+
+const highlights = [
+  "Built parts of early online game worlds before MMOs existed",
+  "Game engine work at Simutronics, including the first game autoupdater",
+  "Nextel's Southeast cell-tower alerting system, which its engineers relied on for years",
+  "Brought GPT-3.5 into Ocelot Consulting and started its AI practice",
+  "Founded QDivision, an engineering accelerator that graduated 23 engineers",
+];
 ---
 
 <Layout
   title="About"
-  description="Eldritch, Inc. builds software for complex AI systems. Founded by engineer and architect Eris Discordia Montano."
+  description="Eldritch, Inc. makes AI workflows cheaper and proves quality held. Founded by Eris Discordia Montano, an engineer and architect with 30 years in software."
 >
   <section class="hero">
     <div class="site-container hero-inner">
@@ -42,8 +51,10 @@ import Layout from "../layouts/Layout.astro";
         </p>
 
         <p>
-          Today, our primary focus is Azathoth: an open-source framework
-          for constructing, evaluating, and optimizing AI workflows.
+          Today, our focus is Azathoth, our open-source engine for
+          benchmarking, optimizing and governing AI workflows, now at
+          version {azathoth.version}, and on helping companies use it to make
+          the AI they already run cheaper and more dependable.
         </p>
 
         <p class="emphasis">
@@ -74,8 +85,8 @@ import Layout from "../layouts/Layout.astro";
 
         <p>
           Eris is a software engineer, architect, and engineering leader
-          with nearly three decades of experience building and modernizing
-          complex technical systems.
+          with 30 years of experience building and modernizing complex
+          technical systems.
         </p>
 
         <p>
@@ -92,7 +103,16 @@ import Layout from "../layouts/Layout.astro";
           organizations through major shifts in how software is built.
         </p>
 
+        <ul class="highlights" aria-label="Career highlights">
+          {highlights.map((item) => <li>{item}</li>)}
+        </ul>
+
         <div class="founder-links">
+          <a href={site.booking} target="_blank" rel="noreferrer">
+            Book a call
+            <span aria-hidden="true">↗</span>
+          </a>
+
           <a
             href="https://github.com/EldritchInc"
             target="_blank"
@@ -131,8 +151,9 @@ import Layout from "../layouts/Layout.astro";
           <div>
             <h3>Artificial intelligence</h3>
             <p>
-              Building AI infrastructure, autonomous workflow systems,
-              evaluation frameworks, and Azathoth at Eldritch.
+              Building Azathoth at Eldritch: open source, built solo in the
+              open from first commit to {azathoth.version} in about three
+              months, with 110 architecture decision records behind it.
             </p>
           </div>
         </article>
@@ -146,6 +167,8 @@ import Layout from "../layouts/Layout.astro";
               Architected cloud platforms, event-driven systems, enterprise
               infrastructure, and modernization initiatives while coaching
               engineering organizations through major technical transitions.
+              Brought GPT-3.5 into Ocelot Consulting when the field was brand
+              new, and started the firm down the path to AI consulting.
             </p>
           </div>
         </article>
@@ -156,9 +179,10 @@ import Layout from "../layouts/Layout.astro";
           <div>
             <h3>Networked applications & multiplayer systems</h3>
             <p>
-              Built enterprise web applications, telecommunications
-              platforms, RFID systems, real-time audience technologies,
-              and commercial multiplayer gaming infrastructure.
+              Built parts of early online game worlds before MMOs existed,
+              commercial multiplayer game infrastructure at Simutronics,
+              Nextel's Southeast cell-tower alerting system, enterprise web
+              applications, RFID systems and real-time audience technologies.
             </p>
           </div>
         </article>
@@ -222,17 +246,19 @@ import Layout from "../layouts/Layout.astro";
       </div>
 
       <div class="actions">
-        <a class="button button-primary" href="/azathoth">
-          Explore Azathoth
+        <a class="button button-primary" href="/workwithus">
+          Work with us
           <span aria-hidden="true">→</span>
         </a>
 
         <a
           class="button button-secondary"
-          href="mailto:eris@eldritchinc.com"
+          href={site.booking}
+          target="_blank"
+          rel="noreferrer"
         >
-          Contact Eris
-          <span aria-hidden="true">→</span>
+          Book a review
+          <span aria-hidden="true">↗</span>
         </a>
       </div>
     </div>
@@ -504,6 +530,35 @@ import Layout from "../layouts/Layout.astro";
   .button-secondary:focus-visible {
     background: var(--color-foreground);
     color: var(--color-surface);
+  }
+
+  .highlights {
+    max-width: 680px;
+    padding: 0;
+    margin: 2rem 0 0;
+    list-style: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .highlights li {
+    position: relative;
+    padding: 0.8rem 0 0.8rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    color: var(--color-surface);
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+
+  .highlights li::before {
+    content: "✦";
+    position: absolute;
+    left: 0;
+    color: #9dbbac;
+    font-size: 0.8rem;
+  }
+
+  .founder-links {
+    flex-wrap: wrap;
   }
 
   @media (max-width: 850px) {
