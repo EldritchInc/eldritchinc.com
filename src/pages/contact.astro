@@ -1,10 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { site } from "../data/site";
 ---
 
 <Layout
   title="Contact"
-  description="Contact Eldritch, Inc. about Azathoth, AI systems engineering, collaboration, or investment."
+  description="Book a 30-minute workflow review, or contact Eldritch, Inc. about Azathoth, AI workflow optimization, collaboration, or investment."
 >
   <section class="hero">
     <div class="site-container hero-inner">
@@ -16,9 +17,9 @@ import Layout from "../layouts/Layout.astro";
       </h1>
 
       <p class="lede">
-        We’re interested in conversations about AI systems,
-        open-source infrastructure, technical collaboration,
-        and the future of Azathoth.
+        The fastest way to start is a free 30-minute workflow review.
+        We’re also glad to talk about Azathoth, open-source collaboration,
+        and investment.
       </p>
     </div>
   </section>
@@ -38,6 +39,15 @@ import Layout from "../layouts/Layout.astro";
       </div>
 
       <div class="details">
+        <article>
+          <p class="label">Book a call</p>
+
+          <a href={site.booking} target="_blank" rel="noreferrer">
+            30-minute workflow review
+            <span aria-hidden="true">↗</span>
+          </a>
+        </article>
+
         <article>
           <p class="label">Email</p>
 
@@ -84,18 +94,20 @@ import Layout from "../layouts/Layout.astro";
 
       <div class="conversation-copy">
         <p>
-          Eldritch is building infrastructure for increasingly complex
-          AI systems and is interested in conversations with engineers,
-          open-source contributors, organizations, and investors working
-          on adjacent problems.
+          If your company runs AI workflows in production, bring one to a
+          30-minute call. We’ll talk about what it does, what it costs, and
+          whether a fixed-price Workflow Cost Audit would pay for itself.
+          Engineers, contributors and investors are welcome too.
         </p>
 
         <a
           class="button"
-          href="mailto:eris@eldritchinc.com"
+          href={site.booking}
+          target="_blank"
+          rel="noreferrer"
         >
-          Email Eris
-          <span aria-hidden="true">→</span>
+          {site.bookingLabel}
+          <span aria-hidden="true">↗</span>
         </a>
       </div>
     </div>
