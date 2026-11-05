@@ -33,6 +33,20 @@ const engagements = [
     ],
   },
   {
+    name: "Agent Access Pilot",
+    length: "3–4 weeks · fixed price",
+    price: "$15,000",
+    featured: false,
+    summary:
+      "Let your agents use your best workflows, safely. We expose two or three of your promoted workflows to your internal agents or Claude Desktop, behind your own identity provider, with a scope per tool and a full audit trail.",
+    includes: [
+      "Your workflows benchmarked and promoted",
+      "azathoth-mcp set up in your environment, behind your identity provider",
+      "Per-tool scopes and caller audit configured",
+      "Your team trained to add and retire tools",
+    ],
+  },
+  {
     name: "Re-optimization Retainer",
     length: "Monthly",
     price: "$2,000/mo",
@@ -90,7 +104,15 @@ const faqs = [
   },
   {
     q: "Our security team won't let data leave our account.",
-    a: "With Amazon Bedrock, Azathoth runs inside your AWS account on models you've approved, and its records stay in your own database and storage. Tools only receive the credentials they explicitly declare, and traces never carry content.",
+    a: "Azathoth runs in your own environment, and with Amazon Bedrock it calls models you've approved in your own AWS account. Its records stay in your own database and storage. Tools only receive the credentials they explicitly declare, and traces never carry content.",
+  },
+  {
+    q: "Can our AI agents use this?",
+    a: "Yes, through azathoth-mcp. Agents only see the workflows you list, only run what you've promoted, and only reach the tools their token allows. Every call is recorded with its caller.",
+  },
+  {
+    q: "Is there a hosted MCP service?",
+    a: "No. It runs in your environment, on your infrastructure and behind your identity provider, so you stay in control.",
   },
   {
     q: "We don't have budget for a big project.",
@@ -98,7 +120,7 @@ const faqs = [
   },
   {
     q: "What if we're not on AWS?",
-    a: "Azathoth runs anywhere Python or containers run, with SQLite or PostgreSQL, and reaches hundreds of models through OpenRouter. Our ready-made production template targets AWS.",
+    a: "Azathoth runs anywhere Python or containers run, with SQLite or PostgreSQL, and reaches hundreds of models through OpenRouter. A CloudFormation template for AWS is included; end-to-end AWS validation is in progress.",
   },
   {
     q: "Who owns what at the end?",
@@ -109,7 +131,7 @@ const faqs = [
 
 <Layout
   title="Work with us"
-  description="Fixed-price engagements that make your AI workflows cheaper and prove quality held: a two-week Workflow Cost Audit, an Optimization Pilot, and a re-optimization retainer."
+  description="Fixed-price engagements that make your AI workflows cheaper and prove quality held, or give your AI agents governed access to them: a Workflow Cost Audit, an Optimization Pilot, an Agent Access Pilot, and a re-optimization retainer."
 >
   <section class="hero section-dark">
     <Tendrils />
@@ -391,7 +413,7 @@ const faqs = [
 
   .offer-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.25rem;
     margin-top: clamp(3.5rem, 7vw, 6rem);
   }
@@ -638,11 +660,13 @@ const faqs = [
     margin-top: 1.5rem;
   }
 
-  @media (max-width: 1000px) {
+  @media (max-width: 760px) {
     .offer-grid {
       grid-template-columns: 1fr;
     }
+  }
 
+  @media (max-width: 1000px) {
     .steps {
       grid-template-columns: 1fr 1fr;
       row-gap: 2.5rem;

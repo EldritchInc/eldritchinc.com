@@ -2,7 +2,7 @@
 import Lifecycle from "../components/Lifecycle.astro";
 import Tendrils from "../components/Tendrils.astro";
 import Layout from "../layouts/Layout.astro";
-import { azathoth, site } from "../data/site";
+import { azathoth, mcp, site } from "../data/site";
 
 const lifecycle = [
   { name: "Compose", text: "Workflows are plain documents of steps and tools. No application code." },
@@ -10,7 +10,7 @@ const lifecycle = [
   { name: "Benchmark", text: "Score the workflow against your real cases for quality, speed and cost." },
   { name: "Optimize", text: "Try cheaper compatible models, step by step. Evidence picks the winner." },
   { name: "Promote", text: "Deliberately make the winner the production version, with an audit record." },
-  { name: "Invoke", text: "Production runs exactly what was promoted. Nothing more, nothing less." },
+  { name: "Invoke", text: "Production runs exactly what was promoted, whether the call comes from the CLI, a queue, or an AI agent." },
 ];
 
 const roles = [
@@ -29,6 +29,13 @@ const roles = [
     does: "run the show",
     text: "Run, benchmark, optimize, promote and operate everything from the command line, like any other production service.",
   },
+];
+
+const agentFeatures = [
+  "Promoted workflows served as MCP tools",
+  "OAuth 2.1 resource server with a scope per tool",
+  "Every invocation audited with its caller",
+  "Progress notifications as each step finishes",
 ];
 
 const features = [
@@ -80,7 +87,7 @@ const features = [
   {
     area: "Operations",
     items: [
-      "62 commands: everything is operable from bash",
+      "Every operation available from bash",
       "Append-only history; revert by re-importing",
       "SQLite on a laptop, PostgreSQL in production",
       "OpenTelemetry tracing that never carries content",
@@ -97,8 +104,32 @@ const examples = [
   { name: "The basics", text: "Prompts, sentiment, redundant producers, loops and maps: small examples to learn from." },
 ];
 
+const guarantees = [
+  {
+    name: "Only promoted workflows run",
+    text: "Each call runs the active production revision. The server won't start if a listed workflow hasn't been promoted, and re-promoting takes effect without a restart.",
+  },
+  {
+    name: "Only what you list is exposed",
+    text: "You choose each workflow, its tool name and the description the model sees. There is no \"run anything\" tool, and promotion and optimization are never offered.",
+  },
+  {
+    name: "One scope per tool",
+    text: "Tokens come from your own identity provider, and a caller sees only the tools its token allows.",
+  },
+  {
+    name: "Every call recorded with its caller",
+    text: "Each invocation records who called and how. One lookup shows the input, the outcome and every step of the run.",
+  },
+  {
+    name: "Retries never double-run",
+    text: "Repeating a call with the same idempotency key returns the recorded result, and interrupted calls resume where they stopped.",
+  },
+];
+
 const comparison = [
   ["The engine owns the flow; models only answer prompts", "The model drives the loop as an agent"],
+  ["Agents see only the tools an operator listed, scoped per caller, with every call audited", "Agents get broad API keys or an ungoverned MCP server"],
   ["Workflows composed as documents from tools", "Workflows written as application code"],
   ["Every step recorded: model, tokens, cost, attempts", "Logs, if someone added them"],
   ["Benchmarks, judges and optimization built in", "Separate evaluation tools, bolted on"],
@@ -109,8 +140,8 @@ const comparison = [
 ];
 
 const roadmap = [
-  { name: "Azathoth-MCP", text: "Expose your production workflows to AI agents over the Model Context Protocol." },
-  { name: "PDF and multimodal input", text: "Starting with PDFs in 1.2." },
+  { name: "PDF and multimodal input", text: "Planned for 1.3, starting with PDFs." },
+  { name: "MCP server in the AWS template", text: "Run the agent server from the same CloudFormation stack as the workers." },
   { name: "Cthulhu", text: "A paid optimizer that improves prompts, structure and escalation, not just model choice." },
   { name: "A visual interface", text: "Compose and test workflows without the command line." },
 ];
@@ -118,13 +149,15 @@ const roadmap = [
 
 <Layout
   title="Azathoth"
-  description={`Azathoth ${azathoth.version} is an open-source engine that runs AI workflows as versioned specifications and improves them only from evidence. Runs on a laptop or in your own AWS account.`}
+  description={`Azathoth ${azathoth.version} is an open-source engine that runs AI workflows as versioned specifications, improves them only from evidence, and serves promoted workflows to AI agents as governed MCP tools.`}
 >
   <section class="hero section-dark">
     <Tendrils />
 
     <div class="site-container hero-inner">
-      <p class="pill">Version {azathoth.version} · “{azathoth.releaseName}”</p>
+      <a class="pill" href="#agents">
+        Version {azathoth.version}{azathoth.releaseName && ` · “${azathoth.releaseName}”`}: now with agent tools (MCP)
+      </a>
 
       <h1 class="display">
         Take your AI workflows back
@@ -236,7 +269,7 @@ const roadmap = [
       <div class="split block-split">
         <div>
           <p class="eyebrow">What ships in {azathoth.version}</p>
-          <h2 class="heading">Production-ready, today.</h2>
+          <h2 class="heading">Ready to run today.</h2>
         </div>
 
         <p class="lede">
@@ -246,6 +279,14 @@ const roadmap = [
       </div>
 
       <div class="feature-grid">
+        <article class="feature-new">
+          <p class="new-label">New in {azathoth.version}</p>
+          <h3>Agents (MCP)</h3>
+          <ul>
+            {agentFeatures.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+
         {
           features.map((group) => (
             <article>
@@ -271,25 +312,132 @@ const roadmap = [
 
       <div class="prose">
         <p>
-          One CloudFormation template deploys Azathoth to AWS Fargate with
-          job queues, an encrypted evidence bucket, least-privilege access,
-          Secrets Manager and autoscaling workers.
+          Azathoth works with Amazon Bedrock models, an SQS queue worker,
+          S3 inputs and PostgreSQL, and adds what Step Functions doesn't
+          have: model choice, benchmarking and optimization.
         </p>
 
         <p>
-          It works natively with Amazon Bedrock, SQS, S3 and PostgreSQL on
-          RDS, and adds what Step Functions doesn't have: model choice,
-          benchmarking and optimization.
+          A CloudFormation template for AWS Fargate is included, with job
+          queues, an encrypted evidence bucket, least-privilege access and
+          autoscaling workers.
+        </p>
+
+        <p class="emphasis">
+          End-to-end AWS validation of the template is in progress.
         </p>
 
         <ul class="aws-list">
-          <li>Fargate</li>
-          <li>Bedrock</li>
-          <li>SQS</li>
-          <li>S3</li>
-          <li>Secrets Manager</li>
-          <li>RDS PostgreSQL</li>
+          <li>Amazon Bedrock</li>
+          <li>SQS worker</li>
+          <li>S3 inputs</li>
+          <li>PostgreSQL</li>
         </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section agents" id="agents">
+    <div class="site-container">
+      <div class="split block-split">
+        <div>
+          <p class="eyebrow">New in {azathoth.version} · Agents (MCP)</p>
+          <h2 class="heading">Give agents your workflows, not your keys.</h2>
+        </div>
+
+        <p class="lede">
+          <code>{mcp.pypiName}</code> serves your promoted workflows as
+          tools for AI clients: Claude Desktop, your IDE, or your own
+          agents. It's Azathoth's promotion rule, extended to agents.
+          Nothing runs that wasn't promoted. Nothing is exposed that wasn't
+          listed.
+        </p>
+      </div>
+
+      <ol class="guarantees">
+        {
+          guarantees.map((item, index) => (
+            <li>
+              <span class="guarantee-number">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <h3>{item.name}</h3>
+              <p>{item.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="modes">
+        <article>
+          <p class="mode-label">Local · stdio</p>
+          <h3>One person, one client</h3>
+          <p>
+            For a single local client such as Claude Desktop. It uses the
+            same environment as the CLI, and the guide covers setup on
+            macOS and Windows.
+          </p>
+        </article>
+
+        <article class="mode-team">
+          <p class="mode-label">Team · Streamable HTTP</p>
+          <h3>One shared server, behind your identity provider</h3>
+          <p>
+            Usually on PostgreSQL, in front of Entra ID, Okta, Cognito or
+            Keycloak. It accepts only signed, unexpired tokens issued for
+            this server and never issues tokens itself. Without an identity
+            provider, it only listens on the local machine.
+          </p>
+        </article>
+      </div>
+
+      <div class="mcp-start">
+        <div class="mcp-commands">
+          <div class="command" aria-label="Install the MCP server">
+            <code>pip install {mcp.pypiName}</code>
+          </div>
+          <div class="command" aria-label="Start the MCP server">
+            <code>{mcp.command}</code>
+          </div>
+        </div>
+
+        <div>
+          <p class="mcp-note">
+            Callers pass inline values only. The server never reads files
+            or references on a caller's behalf.
+          </p>
+
+          <div class="actions">
+            <a
+              class="button button-primary"
+              href={mcp.guide}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Read the MCP guide
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            {
+              azathoth.demoVideoUrl && (
+                <a
+                  class="button button-secondary"
+                  href={azathoth.demoVideoUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Watch the 60-second demo
+                  <span aria-hidden="true">↗</span>
+                </a>
+              )
+            }
+
+            <a class="button button-secondary" href="/workwithus#engagements">
+              Agent Access Pilot
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -394,15 +542,21 @@ const roadmap = [
 
         <p class="lede">
           Built in public, solo, from August 1, 2026 to {azathoth.version}
-          in about three months, with 110 architecture decision records
-          and every provider faked in tests.
+          in just over three months, with more than a hundred architecture
+          decision records and every provider faked in tests.
         </p>
       </div>
 
       <div class="install">
-        <div class="command" aria-label="Install command">
+        <div class="command" aria-label="Install the engine">
           <code>pip install {azathoth.pypiName}</code>
         </div>
+        <div class="command second" aria-label="Install the MCP server">
+          <code>pip install {mcp.pypiName}</code>
+        </div>
+        <p class="install-note">
+          Released together, always at the same version.
+        </p>
 
         <dl class="facts">
           <div>
@@ -413,7 +567,10 @@ const roadmap = [
           </div>
           <div>
             <dt>Container</dt>
-            <dd><code>{azathoth.image}</code></dd>
+            <dd>
+              <code>{azathoth.image}</code>
+              <span class="fact-note">{azathoth.imageNote}</span>
+            </dd>
           </div>
           <div>
             <dt>Platforms</dt>
@@ -438,11 +595,11 @@ const roadmap = [
 
           <a
             class="button button-secondary"
-            href={azathoth.pypiUrl}
+            href={azathoth.changelog}
             target="_blank"
             rel="noreferrer"
           >
-            PyPI
+            Changelog
             <span aria-hidden="true">↗</span>
           </a>
         </div>
@@ -596,6 +753,157 @@ const roadmap = [
     font-weight: 700;
   }
 
+  .feature-grid .feature-new {
+    grid-column: 1 / -1;
+    border-color: var(--color-deep);
+    background: var(--color-deep);
+    color: var(--color-surface);
+  }
+
+  .feature-new ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2rem;
+  }
+
+  .feature-new li {
+    color: var(--color-deep-muted);
+  }
+
+  .feature-new li::before {
+    color: var(--color-signal);
+  }
+
+  .new-label,
+  .mode-label {
+    margin: 0 0 0.75rem;
+    color: var(--color-accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .feature-new .new-label {
+    color: var(--color-signal);
+  }
+
+  .guarantees {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    padding: 0;
+    margin: clamp(3.5rem, 7vw, 6rem) 0 0;
+    list-style: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .guarantees li {
+    padding: 2rem 1.5rem 0 0;
+  }
+
+  .guarantees li + li {
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--color-border);
+  }
+
+  .guarantee-number {
+    color: var(--color-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  .guarantees h3 {
+    margin: 1.5rem 0 0.75rem;
+    font-size: 1.15rem;
+    line-height: 1.3;
+  }
+
+  .guarantees p,
+  .modes p:last-child {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .modes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+
+  .modes article {
+    padding: 2rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .modes h3 {
+    margin: 0 0 0.75rem;
+    font-size: 1.35rem;
+    letter-spacing: -0.02em;
+  }
+
+  .modes .mode-team {
+    border-color: var(--color-deep);
+    background: var(--color-deep);
+    color: var(--color-surface);
+  }
+
+  .mode-team .mode-label {
+    color: var(--color-signal);
+  }
+
+  .modes .mode-team p:last-child {
+    color: var(--color-deep-muted);
+  }
+
+  .mcp-start {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: start;
+    gap: clamp(2rem, 5vw, 4rem);
+    margin-top: 2.5rem;
+  }
+
+  .mcp-commands {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .mcp-note,
+  .install-note {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .mcp-start .actions {
+    margin-top: 1.25rem;
+  }
+
+  .agents .lede code {
+    color: var(--color-foreground);
+    font-size: 0.92em;
+  }
+
+  .command.second {
+    margin-top: 0.5rem;
+  }
+
+  .install-note {
+    margin-top: 0.75rem;
+  }
+
+  .fact-note {
+    flex-basis: 100%;
+    color: var(--color-muted);
+    font-size: 0.85rem;
+  }
+
   .aws-list {
     display: flex;
     flex-wrap: wrap;
@@ -746,10 +1054,33 @@ const roadmap = [
     position: relative;
   }
 
+  @media (max-width: 1000px) {
+    .guarantees {
+      grid-template-columns: 1fr;
+    }
+
+    .guarantees li,
+    .guarantees li + li {
+      padding: 1.5rem 0;
+      border-left: 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .guarantees h3 {
+      margin-top: 0.5rem;
+    }
+  }
+
   @media (max-width: 900px) {
     .roles,
     .feature-grid,
-    .example-grid {
+    .example-grid,
+    .modes,
+    .mcp-start {
+      grid-template-columns: 1fr;
+    }
+
+    .feature-new ul {
       grid-template-columns: 1fr;
     }
 

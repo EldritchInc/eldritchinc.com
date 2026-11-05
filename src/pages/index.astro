@@ -22,7 +22,7 @@ const loop = [
 const audiences = [
   {
     who: "Platform & DevOps",
-    hear: "Operate AI like any other service: a command line, Postgres, queues, AWS Fargate, tracing, resumable runs.",
+    hear: "Operate AI like any other service: a command line, Postgres, queues, containers, tracing, resumable runs.",
   },
   {
     who: "Engineering leaders",
@@ -34,26 +34,28 @@ const audiences = [
   },
   {
     who: "Risk & compliance",
-    hear: "An approved model list, least-privilege tools, append-only history, and traces that never carry content.",
+    hear: "An approved model list, least-privilege tools, append-only history, traces that never carry content, and agents that reach only the tools you list.",
   },
   {
     who: "AWS shops",
-    hear: "One CloudFormation template. Amazon Bedrock built in. A better home for AI workflows than Step Functions.",
+    hear: "Amazon Bedrock built in, and a CloudFormation template for Fargate included, with end-to-end validation in progress. A better home for AI workflows than Step Functions.",
   },
   {
-    who: "Domain experts",
-    hear: "Compose and test workflows as plain documents, without waiting on a developer.",
+    who: "Teams rolling out agents",
+    hear: "Give agents real capability without giving up control: a scope per tool, your own identity provider, and a full audit trail.",
   },
 ];
 ---
 
-<Layout>
+<Layout
+  description="Cut what your AI workflows cost and prove quality held. Azathoth is an open-source engine that runs in your own environment, and serves your promoted workflows to AI agents as governed tools."
+>
   <section class="hero section-dark">
     <Tendrils />
 
     <div class="site-container hero-inner">
-      <a class="pill" href="/azathoth">
-        Azathoth {azathoth.version} is out: now on AWS
+      <a class="pill" href="/azathoth#agents">
+        Azathoth {azathoth.version}: your workflows as agent tools (MCP)
       </a>
 
       <h1 class="display">
@@ -64,7 +66,7 @@ const audiences = [
       <p class="lede">
         Eldritch benchmarks, optimizes and governs the AI workflows your
         company already runs, using Azathoth, our open-source engine that
-        runs in your own AWS account. Every change comes with the evidence
+        runs in your own environment. Every change comes with the evidence
         behind it.
       </p>
 
@@ -87,7 +89,7 @@ const audiences = [
 
       <ul class="hero-facts" aria-label="At a glance">
         <li>Open source</li>
-        <li>Runs in your AWS account</li>
+        <li>Runs in your environment</li>
         <li>OpenRouter &amp; Amazon Bedrock</li>
         <li>Nothing ships without proof</li>
       </ul>
@@ -144,6 +146,41 @@ const audiences = [
         label="Benchmark, optimize, promote: all three write to one evidence store"
         store="Every step is evidence"
       />
+    </div>
+  </section>
+
+  <section class="section agents">
+    <div class="site-container split">
+      <div>
+        <p class="eyebrow">New in Azathoth {azathoth.version}</p>
+        <h2 class="heading">Let agents use your workflows, on your terms.</h2>
+      </div>
+
+      <div class="prose">
+        <p>
+          Your best workflows can now be tools for AI agents: Claude Desktop,
+          your IDE, or the agents your company builds.
+        </p>
+
+        <p>
+          Agents see only the workflows you list. They run only what you've
+          promoted, reach only the tools their token allows, and every call
+          is recorded with who made it.
+        </p>
+
+        <p class="emphasis">
+          It runs in your environment, behind your own identity provider.
+        </p>
+
+        <div class="actions">
+          <a class="text-link" href="/azathoth#agents">
+            How agent access works <span aria-hidden="true">→</span>
+          </a>
+          <a class="text-link" href="/workwithus#engagements">
+            The Agent Access Pilot <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -285,7 +322,7 @@ const audiences = [
             She brought GPT-3.5 into Ocelot Consulting when the field was
             brand new and started the firm down the path to AI consulting.
             Then she built Azathoth, solo and in the open, from first commit
-            to {azathoth.version} in about three months.
+            to {azathoth.version} in just over three months.
           </p>
         </div>
 
@@ -304,7 +341,8 @@ const audiences = [
         <h2 class="heading">Try it yourself.</h2>
         <p class="lede">
           Azathoth is free and open source. Your team can install it today
-          and run it on a laptop, or deploy it to AWS from one template.
+          and run it on a laptop. A CloudFormation template for AWS is
+          included, with end-to-end validation in progress.
         </p>
       </div>
 
@@ -506,6 +544,10 @@ const audiences = [
     margin: 1rem 0 2rem;
     color: var(--color-accent);
     font-weight: 700;
+  }
+
+  .agents .actions {
+    gap: 2rem;
   }
 
   .install .actions {
