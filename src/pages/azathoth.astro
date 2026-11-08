@@ -31,11 +31,46 @@ const roles = [
   },
 ];
 
-const agentFeatures = [
-  "Promoted workflows served as MCP tools",
-  "OAuth 2.1 resource server with a scope per tool",
-  "Every invocation audited with its caller",
-  "Progress notifications as each step finishes",
+const highlights = [
+  {
+    label: "New in 1.3",
+    area: "Documents & citations",
+    items: [
+      "PDFs and images in, from local files or S3",
+      "Citations checked against the text, with no model involved",
+      "Anchored to the exact words, page and position",
+      "Exported as W3C Web Annotations, with links to the cited page",
+    ],
+  },
+  {
+    label: "Serve and call",
+    area: "Agents & MCP",
+    items: [
+      "Promoted workflows served as MCP tools, with their schemas",
+      "OAuth 2.1 resource server with a scope per tool",
+      "Every invocation audited with its caller",
+      "Workflow steps can call tools other MCP servers serve",
+    ],
+  },
+];
+
+const documentFlow = [
+  {
+    name: "Documents in",
+    text: "Workflows accept PDFs and images by reference, from local files or S3. A standard tool divides a PDF into citable segments.",
+  },
+  {
+    name: "Citations checked",
+    text: "When a step cites a passage, it's checked against the document's own text before it's kept, and anchored to the exact words, page and position on the page.",
+  },
+  {
+    name: "Models that read",
+    text: "A step can show the PDF or image itself to a model that reads it, on OpenRouter or Amazon Bedrock.",
+  },
+  {
+    name: "Provenance out",
+    text: "Citations export as W3C Web Annotations that point back into the source, with S3 objects pinned by version. One command gives a link to the cited page.",
+  },
 ];
 
 const features = [
@@ -82,6 +117,7 @@ const features = [
       "Idempotent invocations, so retries never double-run",
       "Interrupted runs resume where they stopped",
       "Files of any size, split and processed in parallel",
+      "Workflow contracts: input and result schemas enforced on every call",
     ],
   },
   {
@@ -102,6 +138,8 @@ const examples = [
   { name: "Workflow writer", text: "A workflow that writes, and validates, new Azathoth workflows." },
   { name: "Large files", text: "Counts words across a file of any size in S3 by splitting it and processing the pieces in parallel." },
   { name: "The basics", text: "Prompts, sentiment, redundant producers, loops and maps: small examples to learn from." },
+  { name: "Claim documents", text: "Segments a two-page sample claim PDF and answers questions about it, each answer citing the page it came from." },
+  { name: "MCP tools", text: "Workflows whose steps call tools that other MCP servers serve." },
 ];
 
 const guarantees = [
@@ -111,7 +149,7 @@ const guarantees = [
   },
   {
     name: "Only what you list is exposed",
-    text: "You choose each workflow, its tool name and the description the model sees. There is no \"run anything\" tool, and promotion and optimization are never offered.",
+    text: "You choose each workflow, its tool name and the description the model sees, and each tool carries the workflow's input and result schemas. There is no \"run anything\" tool, and promotion and optimization are never offered.",
   },
   {
     name: "One scope per tool",
@@ -130,6 +168,7 @@ const guarantees = [
 const comparison = [
   ["The engine owns the flow; models only answer prompts", "The model drives the loop as an agent"],
   ["Agents see only the tools an operator listed, scoped per caller, with every call audited", "Agents get broad API keys or an ungoverned MCP server"],
+  ["Citations checked against the source document, with no model involved", "Citations, if any, are the model's word"],
   ["Workflows composed as documents from tools", "Workflows written as application code"],
   ["Every step recorded: model, tokens, cost, attempts", "Logs, if someone added them"],
   ["Benchmarks, judges and optimization built in", "Separate evaluation tools, bolted on"],
@@ -140,23 +179,23 @@ const comparison = [
 ];
 
 const roadmap = [
-  { name: "PDF and multimodal input", text: "Planned for 1.3, starting with PDFs." },
-  { name: "MCP server in the AWS template", text: "Run the agent server from the same CloudFormation stack as the workers." },
-  { name: "Cthulhu", text: "A paid optimizer that improves prompts, structure and escalation, not just model choice." },
-  { name: "A visual interface", text: "Compose and test workflows without the command line." },
+  { when: "1.4", name: "A visual interface", text: "Compose and test workflows without the command line." },
+  { when: "1.5", name: "Audio and video input", text: "The same evidence trail for recordings that 1.3 brings to documents." },
+  { when: "Planned", name: "MCP server in the AWS template", text: "Run the agent server from the same CloudFormation stack as the workers." },
+  { when: "Planned", name: "Cthulhu", text: "A paid optimizer that improves prompts, structure and escalation, not just model choice." },
 ];
 ---
 
 <Layout
   title="Azathoth"
-  description={`Azathoth ${azathoth.version} is an open-source engine that runs AI workflows as versioned specifications, improves them only from evidence, and serves promoted workflows to AI agents as governed MCP tools.`}
+  description={`Azathoth ${azathoth.version} is an open-source engine that runs AI workflows as versioned specifications and improves them only from evidence. It reads documents, checks every citation against the source page, and serves promoted workflows to AI agents as governed MCP tools.`}
 >
   <section class="hero section-dark">
     <Tendrils />
 
     <div class="site-container hero-inner">
-      <a class="pill" href="#agents">
-        Version {azathoth.version}{azathoth.releaseName && ` · “${azathoth.releaseName}”`}: now with agent tools (MCP)
+      <a class="pill" href="#documents">
+        Version {azathoth.version}{azathoth.releaseName && ` · “${azathoth.releaseName}”`}: reads documents and cites the page
       </a>
 
       <h1 class="display">
@@ -245,6 +284,64 @@ const roadmap = [
     </div>
   </section>
 
+  <section class="section documents" id="documents">
+    <div class="site-container">
+      <div class="split block-split">
+        <div>
+          <p class="eyebrow">New in 1.3 · Documents</p>
+          <h2 class="heading">Every answer, traced to the page it came from.</h2>
+        </div>
+
+        <p class="lede">
+          Workflows now read PDFs and images and keep the evidence of where
+          each answer came from. A citation is only kept once it's been
+          checked against the document's own text, with no model involved.
+        </p>
+      </div>
+
+      <ol class="guarantees four">
+        {
+          documentFlow.map((item, index) => (
+            <li>
+              <span class="guarantee-number">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <h3>{item.name}</h3>
+              <p>{item.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="doc-close">
+        <p>
+          A citation that doesn't check out can fail the step and retry, or
+          be kept for a later step to judge. Benchmarks and optimization
+          score the share of verified citations beside quality,
+          reliability, latency and cost, so you can see whether a cheaper
+          model still cites its sources.
+        </p>
+
+        <div class="actions">
+          <a
+            class="button button-primary"
+            href={azathoth.documentsGuide}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Read the documents guide
+            <span aria-hidden="true">↗</span>
+          </a>
+
+          <a class="button button-secondary" href="/workwithus#engagements">
+            Document Evidence Pilot
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section">
     <div class="site-container">
       <p class="eyebrow">Who does what</p>
@@ -279,13 +376,19 @@ const roadmap = [
       </div>
 
       <div class="feature-grid">
-        <article class="feature-new">
-          <p class="new-label">New in {azathoth.version}</p>
-          <h3>Agents (MCP)</h3>
-          <ul>
-            {agentFeatures.map((item) => <li>{item}</li>)}
-          </ul>
-        </article>
+        {
+          highlights.map((group) => (
+            <article class="feature-new">
+              <p class="new-label">{group.label}</p>
+              <h3>{group.area}</h3>
+              <ul>
+                {group.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
 
         {
           features.map((group) => (
@@ -341,7 +444,7 @@ const roadmap = [
     <div class="site-container">
       <div class="split block-split">
         <div>
-          <p class="eyebrow">New in {azathoth.version} · Agents (MCP)</p>
+          <p class="eyebrow">Agents (MCP)</p>
           <h2 class="heading">Give agents your workflows, not your keys.</h2>
         </div>
 
@@ -439,6 +542,33 @@ const roadmap = [
           </div>
         </div>
       </div>
+
+      <div class="mcp-calling">
+        <div>
+          <p class="mode-label">New in 1.3 · The other direction</p>
+          <h3>Workflows can call MCP tools too.</h3>
+        </div>
+
+        <div>
+          <p>
+            A workflow step can call a tool that another MCP server serves,
+            over stdio or HTTP. Each step is pinned to a digest of that
+            tool's schemas, so if the server changes the tool, the step
+            stops instead of sending it bad arguments.
+            <code>azathoth tool from-mcp</code> writes the tool's document
+            for you.
+          </p>
+
+          <a
+            class="text-link"
+            href={azathoth.mcpToolsGuide}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Calling MCP tools <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -524,7 +654,7 @@ const roadmap = [
         {
           roadmap.map((item) => (
             <article>
-              <p class="soon">Coming</p>
+              <p class="soon">{item.when}</p>
               <h3>{item.name}</h3>
               <p>{item.text}</p>
             </article>
@@ -570,6 +700,13 @@ const roadmap = [
             <dd>
               <code>{azathoth.image}</code>
               <span class="fact-note">{azathoth.imageNote}</span>
+            </dd>
+          </div>
+          <div>
+            <dt>Upgrading</dt>
+            <dd>
+              Nothing changes for an existing installation. Upgrade, then run
+              <code>azathoth init</code>.
             </dd>
           </div>
           <div>
@@ -713,12 +850,13 @@ const roadmap = [
 
   .feature-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 1.25rem;
     margin-top: clamp(3.5rem, 7vw, 6rem);
   }
 
   .feature-grid article {
+    grid-column: span 2;
     padding: 2rem;
     border: 1px solid var(--color-border);
     background: var(--color-surface);
@@ -754,16 +892,10 @@ const roadmap = [
   }
 
   .feature-grid .feature-new {
-    grid-column: 1 / -1;
+    grid-column: span 3;
     border-color: var(--color-deep);
     background: var(--color-deep);
     color: var(--color-surface);
-  }
-
-  .feature-new ul {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 2rem;
   }
 
   .feature-new li {
@@ -786,6 +918,57 @@ const roadmap = [
 
   .feature-new .new-label {
     color: var(--color-signal);
+  }
+
+  .guarantees.four {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .doc-close {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    align-items: end;
+    gap: clamp(2rem, 5vw, 4rem);
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .doc-close p,
+  .mcp-calling p {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 1.02rem;
+    line-height: 1.7;
+  }
+
+  .doc-close .actions {
+    justify-content: flex-end;
+    margin-top: 0;
+  }
+
+  .mcp-calling {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-top: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .mcp-calling h3 {
+    margin: 0;
+    font-size: clamp(1.6rem, 3vw, 2.25rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+
+  .mcp-calling p {
+    margin-bottom: 1.25rem;
+  }
+
+  .mcp-calling code {
+    color: var(--color-foreground);
+    font-size: 0.92em;
   }
 
   .guarantees {
@@ -968,7 +1151,7 @@ const roadmap = [
 
   .example-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     margin-top: clamp(3.5rem, 7vw, 6rem);
     border-top: 1px solid var(--color-border);
     border-left: 1px solid var(--color-border);
@@ -1055,8 +1238,13 @@ const roadmap = [
   }
 
   @media (max-width: 1000px) {
-    .guarantees {
+    .guarantees,
+    .guarantees.four {
       grid-template-columns: 1fr;
+    }
+
+    .example-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .guarantees li,
@@ -1080,8 +1268,18 @@ const roadmap = [
       grid-template-columns: 1fr;
     }
 
-    .feature-new ul {
+    .doc-close,
+    .mcp-calling {
       grid-template-columns: 1fr;
+    }
+
+    .doc-close .actions {
+      justify-content: flex-start;
+    }
+
+    .feature-grid article,
+    .feature-grid .feature-new {
+      grid-column: auto;
     }
 
     .roles article,
