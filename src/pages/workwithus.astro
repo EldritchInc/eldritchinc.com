@@ -9,6 +9,7 @@ const engagements = [
     length: "2 weeks · fixed price",
     price: "$7,500",
     featured: true,
+    wide: false,
     summary:
       "The place to start. We rebuild one of your AI workflows in Azathoth, build a benchmark from your real cases, and run optimization.",
     includes: [
@@ -23,6 +24,7 @@ const engagements = [
     length: "4–6 weeks · fixed price",
     price: "$20,000",
     featured: false,
+    wide: false,
     summary:
       "Everything in the audit, then the winning workflow running in production in your own AWS account.",
     includes: [
@@ -37,6 +39,7 @@ const engagements = [
     length: "3–4 weeks · fixed price",
     price: "$15,000",
     featured: false,
+    wide: false,
     summary:
       "Let your agents use your best workflows, safely. We expose two or three of your promoted workflows to your internal agents or Claude Desktop, behind your own identity provider, with a scope per tool and a full audit trail.",
     includes: [
@@ -47,10 +50,26 @@ const engagements = [
     ],
   },
   {
+    name: "Document Evidence Pilot",
+    length: "4–6 weeks · fixed price",
+    price: "$20,000",
+    featured: false,
+    wide: false,
+    summary:
+      "One of your document pipelines rebuilt so every answer cites the exact page it came from, checked against the document itself and linked back into your own storage, including S3.",
+    includes: [
+      "Your documents segmented into citable passages",
+      "Citations verified against the text, anchored to the page",
+      "Benchmarked on citation score as well as quality and cost",
+      "Provenance exported as standard Web Annotations",
+    ],
+  },
+  {
     name: "Re-optimization Retainer",
     length: "Monthly",
     price: "$2,000/mo",
     featured: false,
+    wide: true,
     summary:
       "Models change every month. We keep your workflows on the best measured option as new ones arrive and old ones retire.",
     includes: [
@@ -111,6 +130,14 @@ const faqs = [
     a: "Yes, through azathoth-mcp. Agents only see the workflows you list, only run what you've promoted, and only reach the tools their token allows. Every call is recorded with its caller.",
   },
   {
+    q: "Can it read our documents?",
+    a: "Yes. Workflows read PDFs and images from local files or S3, and every citation is checked against the document's own text before it's kept, down to the page and position. Answers come with links back to the cited page in your own storage.",
+  },
+  {
+    q: "Can it use our existing MCP servers?",
+    a: "Yes. A workflow step can call a tool another MCP server serves, pinned to that tool's schemas, so a change on the server stops the step instead of sending it bad arguments.",
+  },
+  {
     q: "Is there a hosted MCP service?",
     a: "No. It runs in your environment, on your infrastructure and behind your identity provider, so you stay in control.",
   },
@@ -131,7 +158,7 @@ const faqs = [
 
 <Layout
   title="Work with us"
-  description="Fixed-price engagements that make your AI workflows cheaper and prove quality held, or give your AI agents governed access to them: a Workflow Cost Audit, an Optimization Pilot, an Agent Access Pilot, and a re-optimization retainer."
+  description="Fixed-price engagements that make your AI workflows cheaper and prove quality held, give your AI agents governed access to them, or make document answers cite their sources: a Workflow Cost Audit, an Optimization Pilot, an Agent Access Pilot, a Document Evidence Pilot, and a re-optimization retainer."
 >
   <section class="hero section-dark">
     <Tendrils />
@@ -186,7 +213,7 @@ const faqs = [
       <div class="offer-grid">
         {
           engagements.map((offer) => (
-            <article class:list={["offer", { featured: offer.featured }]}>
+            <article class:list={["offer", { featured: offer.featured, wide: offer.wide }]}>
               {offer.featured && <p class="badge">Start here</p>}
               <h3>{offer.name}</h3>
               <p class="length">{offer.length}</p>
@@ -432,6 +459,32 @@ const faqs = [
     color: var(--color-surface);
   }
 
+  .offer-grid .wide {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  .wide h3,
+  .wide .length,
+  .wide .price,
+  .wide .summary {
+    grid-column: 1;
+  }
+
+  .wide ul {
+    grid-column: 2;
+    grid-row: 1 / span 4;
+    margin-top: 0;
+  }
+
+  .wide .button {
+    grid-column: 2;
+    justify-self: start;
+  }
+
   .badge {
     align-self: flex-start;
     margin: 0 0 1.25rem;
@@ -663,6 +716,10 @@ const faqs = [
   @media (max-width: 760px) {
     .offer-grid {
       grid-template-columns: 1fr;
+    }
+
+    .offer-grid .wide {
+      display: flex;
     }
   }
 

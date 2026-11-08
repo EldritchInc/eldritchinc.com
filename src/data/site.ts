@@ -12,7 +12,7 @@ export const site = {
   githubOrg: "https://github.com/EldritchInc",
 } as const;
 
-const version = "1.2.0";
+const version = "1.3.0";
 
 export const azathoth = {
   version,
@@ -22,9 +22,11 @@ export const azathoth = {
   pypiUrl: "https://pypi.org/project/azathoth-ai/",
   repo: "https://github.com/EldritchInc/azathoth",
   changelog: "https://github.com/EldritchInc/azathoth/blob/main/CHANGELOG.md",
+  documentsGuide: "https://github.com/EldritchInc/azathoth/blob/main/docs/documents.md",
+  mcpToolsGuide: "https://github.com/EldritchInc/azathoth/blob/main/docs/mcp-tools.md",
   image: `ghcr.io/eldritchinc/azathoth:${version}`,
   imageNote: "amd64 and arm64, cosign-signed; includes the CLI, queue worker and MCP server",
-  extras: ["postgres", "bedrock", "worker", "otel"],
+  extras: ["documents", "mcp", "postgres", "bedrock", "worker", "otel"],
   // Set to a URL once the 60-second MCP demo exists; the page hides it until then.
   demoVideoUrl: null as string | null,
 } as const;

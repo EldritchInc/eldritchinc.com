@@ -34,7 +34,7 @@ const audiences = [
   },
   {
     who: "Risk & compliance",
-    hear: "An approved model list, least-privilege tools, append-only history, traces that never carry content, and agents that reach only the tools you list.",
+    hear: "An approved model list, least-privilege tools, append-only history, traces that never carry content, agents that reach only the tools you list, and answers traceable to the source page.",
   },
   {
     who: "AWS shops",
@@ -48,14 +48,14 @@ const audiences = [
 ---
 
 <Layout
-  description="Cut what your AI workflows cost and prove quality held. Azathoth is an open-source engine that runs in your own environment, and serves your promoted workflows to AI agents as governed tools."
+  description="Cut what your AI workflows cost and prove quality held. Azathoth is an open-source engine that runs in your own environment, cites the exact page behind every document answer, and serves your promoted workflows to AI agents as governed tools."
 >
   <section class="hero section-dark">
     <Tendrils />
 
     <div class="site-container hero-inner">
-      <a class="pill" href="/azathoth#agents">
-        Azathoth {azathoth.version}: your workflows as agent tools (MCP)
+      <a class="pill" href="/azathoth#documents">
+        Azathoth {azathoth.version}: answers that cite the exact page
       </a>
 
       <h1 class="display">
@@ -152,7 +152,7 @@ const audiences = [
   <section class="section agents">
     <div class="site-container split">
       <div>
-        <p class="eyebrow">New in Azathoth {azathoth.version}</p>
+        <p class="eyebrow">Agent access</p>
         <h2 class="heading">Let agents use your workflows, on your terms.</h2>
       </div>
 
@@ -165,7 +165,8 @@ const audiences = [
         <p>
           Agents see only the workflows you list. They run only what you've
           promoted, reach only the tools their token allows, and every call
-          is recorded with who made it.
+          is recorded with who made it. Your workflows can call other MCP
+          servers' tools, too.
         </p>
 
         <p class="emphasis">
@@ -278,6 +279,15 @@ const audiences = [
           <p>
             A run that fails scores zero and earns no credit for speed or
             cost, so a cheap model that breaks never looks like a bargain.
+          </p>
+        </article>
+
+        <article>
+          <h3>Every answer cites its source</h3>
+          <p>
+            When a workflow answers from a document, each citation is checked
+            against the document's own text, with no model involved, and
+            anchored to the exact words, page and position.
           </p>
         </article>
 
