@@ -12,7 +12,7 @@ export const site = {
   githubOrg: "https://github.com/EldritchInc",
 } as const;
 
-const version = "1.3.0";
+const version = "1.4.0";
 
 export const azathoth = {
   version,
@@ -29,6 +29,13 @@ export const azathoth = {
   extras: ["documents", "mcp", "postgres", "bedrock", "worker", "otel"],
   // Set to a URL once the 60-second MCP demo exists; the page hides it until then.
   demoVideoUrl: null as string | null,
+} as const;
+
+export const ui = {
+  pypiName: "azathoth-ui",
+  pypiUrl: "https://pypi.org/project/azathoth-ui/",
+  repo: "https://github.com/EldritchInc/azathoth-ui",
+  command: "azathoth-ui",
 } as const;
 
 export const mcp = {

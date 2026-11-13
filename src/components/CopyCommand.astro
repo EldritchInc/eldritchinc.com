@@ -1,0 +1,116 @@
+---
+// A command people can copy with one click.
+// variant "button": a single command styled as the primary button.
+// variant "block": one or more lines in a code block with a Copy button.
+interface Props {
+  lines: string[];
+  variant?: "button" | "block";
+  label?: string;
+}
+
+const { lines, variant = "block", label = "Copy command" } = Astro.props;
+const text = lines.join("\n");
+---
+
+{
+  variant === "button" ? (
+    <button
+      class="button button-signal copy-button"
+      type="button"
+      data-copy={text}
+      aria-label={`${label}: ${text}`}
+    >
+      <code>{text}</code>
+      <span class="copy-state" aria-hidden="true">Copy</span>
+    </button>
+  ) : (
+    <div class="copy-block">
+      <pre><code>{lines.map((line) => <span class="line">{line}</span>)}</code></pre>
+      <button class="copy-small" type="button" data-copy={text} aria-label={label}>
+        <span class="copy-state">Copy</span>
+      </button>
+    </div>
+  )
+}
+
+<style>
+  .copy-button {
+    cursor: pointer;
+  }
+
+  .copy-button code {
+    font-size: 0.95rem;
+  }
+
+  .copy-state {
+    padding-left: 0.8rem;
+    border-left: 1px solid rgba(12, 26, 19, 0.25);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .copy-block {
+    position: relative;
+    background: var(--color-deep);
+  }
+
+  pre {
+    margin: 0;
+    padding: 1.35rem 6rem 1.35rem 1.35rem;
+    overflow-x: auto;
+    color: var(--color-signal);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .line {
+    display: block;
+  }
+
+  .line::before {
+    content: "$ ";
+    color: var(--color-sage);
+    opacity: 0.6;
+  }
+
+  .copy-small {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.9rem;
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--color-deep-border);
+    background: transparent;
+    color: var(--color-signal);
+    cursor: pointer;
+  }
+
+  .copy-small .copy-state {
+    padding: 0;
+    border: 0;
+  }
+
+  .copy-small:hover,
+  .copy-small:focus-visible {
+    border-color: var(--color-signal);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((button) => {
+    const state = button.querySelector(".copy-state");
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy ?? "");
+        if (state) state.textContent = "Copied";
+      } catch {
+        if (state) state.textContent = "Select";
+      }
+      window.setTimeout(() => {
+        if (state) state.textContent = "Copy";
+      }, 1800);
+    });
+  });
+</script>
