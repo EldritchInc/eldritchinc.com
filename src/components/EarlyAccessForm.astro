@@ -1,0 +1,144 @@
+---
+// "Join the azathoth-team early access list", submitted to Netlify Forms.
+import { forms } from "../data/site";
+
+interface Props {
+  // Distinguishes the form's fields on pages that show it more than once.
+  id?: string;
+}
+
+const { id = "early-access" } = Astro.props;
+const field = (name: string) => `${id}-${name}`;
+---
+
+<form
+  class="early"
+  name={forms.earlyAccess}
+  method="POST"
+  action="/thanks/"
+  data-netlify="true"
+  netlify-honeypot="bot-field"
+  data-track="early_access_signup"
+>
+  <input type="hidden" name="form-name" value={forms.earlyAccess} />
+  <p class="visually-hidden">
+    <label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+  </p>
+
+  <div class="fields">
+    <label for={field("name")}>
+      <span>Name</span>
+      <input id={field("name")} name="name" required autocomplete="name" />
+    </label>
+
+    <label for={field("email")}>
+      <span>Work email</span>
+      <input id={field("email")} type="email" name="email" required autocomplete="email" />
+    </label>
+
+    <label for={field("company")}>
+      <span>Company</span>
+      <input id={field("company")} name="company" required autocomplete="organization" />
+    </label>
+
+    <label for={field("size")}>
+      <span>Team size</span>
+      <select id={field("size")} name="team-size" required>
+        <option value="" disabled selected>Choose one</option>
+        {forms.teamSizes.map((size) => <option value={size}>{size}</option>)}
+      </select>
+    </label>
+
+    <label class="wide" for={field("use")}>
+      <span>What would you use it for? <em>(optional)</em></span>
+      <textarea id={field("use")} name="use" rows="3"></textarea>
+    </label>
+  </div>
+
+  <div class="early-actions">
+    <button class="button button-primary" type="submit">Join the early access list</button>
+    <p class="form-note">
+      We'll only use this to contact you about azathoth-team. <a href="/privacy/">Privacy policy</a>
+    </p>
+  </div>
+
+  <p class="form-done" role="status" hidden>
+    Thanks, you're on the azathoth-team early access list. We'll be in touch.
+  </p>
+</form>
+
+<style>
+  .early {
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  label {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  label span {
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  em {
+    color: var(--color-muted);
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  .wide {
+    grid-column: 1 / -1;
+  }
+
+  input,
+  select,
+  textarea {
+    min-height: 3rem;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  .early-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .form-note,
+  .form-done {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.85rem;
+  }
+
+  .form-done {
+    margin-top: 1.25rem;
+    color: var(--color-accent);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  @media (max-width: 640px) {
+    .fields {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

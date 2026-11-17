@@ -3,5 +3,9 @@ import { defineConfig } from "astro/config";
 
 export default defineConfig({
   site: "https://eldritchinc.com",
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes("/thanks"),
+    }),
+  ],
 });

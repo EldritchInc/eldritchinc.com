@@ -1,0 +1,132 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { site } from "../data/site";
+
+const updated = "November 17, 2026";
+---
+
+<Layout
+  title="Privacy"
+  description="What eldritchinc.com collects, why, how long it's kept, and how to have it removed. Nothing is sold."
+>
+  <section class="section">
+    <div class="site-container privacy">
+      <p class="eyebrow">Privacy</p>
+      <h1 class="heading">Privacy policy</h1>
+      <p class="updated">Last updated {updated}</p>
+
+      <p class="lede">
+        We collect very little, use it only for the reasons below, and never
+        sell it.
+      </p>
+
+      <h2>What we collect</h2>
+      <p>
+        <strong>Analytics, only if you accept.</strong> If you click Accept on
+        the cookie banner, we load Google Analytics. It sets cookies and tells us which pages are visited, roughly where
+        visitors are in the world, how they found the site, and whether they
+        sign up or book a call. We don't use Google's advertising features or
+        Google signals. If you decline, no analytics cookies are set and
+        nothing is sent to Google.
+      </p>
+      <p>
+        <strong>What you send us in a form.</strong> The release-notes signup
+        collects your email address. The azathoth-team early access form
+        collects your name, work email, company, team size, and anything you
+        choose to tell us about how you'd use it.
+      </p>
+      <p>
+        <strong>Basic server logs.</strong> Our host, Netlify, keeps standard
+        request logs to run and protect the site.
+      </p>
+
+      <h2>Why</h2>
+      <ul>
+        <li>Analytics: to see which pages help and improve the site.</li>
+        <li>Release notes: to email you when Azathoth ships something new.</li>
+        <li>Early access: to contact you about azathoth-team.</li>
+      </ul>
+
+      <h2>Who handles it</h2>
+      <p>
+        Form submissions are received and stored by Netlify, which hosts this
+        site. Analytics, if you accept, are processed by Google. We share your
+        information with no one else, and we never sell it.
+      </p>
+
+      <h2>How long we keep it</h2>
+      <ul>
+        <li>Analytics data: no more than 14 months.</li>
+        <li>
+          Form submissions: for as long as the list they're for exists, or
+          until you ask us to remove them.
+        </li>
+      </ul>
+
+      <h2>Your choices</h2>
+      <p>
+        You can change your analytics choice at any time:
+        <button class="link-button" type="button" data-consent-reset>
+          change cookie settings
+        </button>.
+        Every release-notes email will let you unsubscribe. To see, correct
+        or delete anything we hold about you, email
+        <a href={`mailto:${site.email}`}>{site.email}</a> and we'll take care
+        of it.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        {site.name}, {site.location}.
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+      </p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .privacy {
+    max-width: 780px;
+  }
+
+  .updated {
+    margin: 1rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+
+  h2 {
+    margin: 2.75rem 0 0.75rem;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+  }
+
+  p,
+  li {
+    color: #2c312c;
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  p {
+    margin: 0 0 1rem;
+  }
+
+  ul {
+    padding-left: 1.25rem;
+  }
+
+  a,
+  .link-button {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  .link-button {
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+</style>

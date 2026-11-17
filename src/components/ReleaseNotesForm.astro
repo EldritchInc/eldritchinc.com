@@ -1,0 +1,138 @@
+---
+// "Get release notes" signup, submitted to Netlify Forms.
+import { forms } from "../data/site";
+
+interface Props {
+  dark?: boolean;
+}
+
+const { dark = false } = Astro.props;
+---
+
+<form
+  class:list={["signup", { dark }]}
+  name={forms.releaseNotes}
+  method="POST"
+  action="/thanks/"
+  data-netlify="true"
+  netlify-honeypot="bot-field"
+  data-track="release_notes_signup"
+>
+  <input type="hidden" name="form-name" value={forms.releaseNotes} />
+  <p class="visually-hidden">
+    <label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+  </p>
+
+  <div class="signup-copy">
+    <p class="signup-title">Get release notes</p>
+    <p class="signup-text">One email when Azathoth ships something new.</p>
+  </div>
+
+  <div class="signup-row">
+    <label class="visually-hidden" for="release-notes-email">Email</label>
+    <input
+      id="release-notes-email"
+      type="email"
+      name="email"
+      required
+      autocomplete="email"
+      placeholder="you@company.com"
+    />
+    <button class="button button-primary" type="submit">Subscribe</button>
+  </div>
+
+  <p class="form-note">
+    We only use your email for release notes. <a href="/privacy/">Privacy policy</a>
+  </p>
+  <p class="form-done" role="status" hidden>
+    Thanks. You're on the list for release notes.
+  </p>
+</form>
+
+<style>
+  .signup {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 1rem 2.5rem;
+    align-items: center;
+    padding: 2rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .signup-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .signup-text {
+    margin: 0.3rem 0 0;
+    color: var(--color-muted);
+  }
+
+  .signup-row {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  input[type="email"] {
+    flex: 1;
+    min-width: 0;
+    min-height: 3.25rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  .form-note,
+  .form-done {
+    grid-column: 2;
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.85rem;
+  }
+
+  .form-done {
+    color: var(--color-accent);
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .dark {
+    border-color: var(--color-deep-border);
+    background: var(--color-deep-raised);
+    color: var(--color-surface);
+  }
+
+  .dark .signup-text,
+  .dark .form-note {
+    color: var(--color-deep-muted);
+  }
+
+  .dark .form-done {
+    color: var(--color-signal);
+  }
+
+  .dark input[type="email"] {
+    border-color: var(--color-deep-border);
+    background: var(--color-deep);
+    color: var(--color-surface);
+  }
+
+  @media (max-width: 760px) {
+    .signup {
+      grid-template-columns: 1fr;
+    }
+
+    .form-note,
+    .form-done {
+      grid-column: 1;
+    }
+
+    .signup-row {
+      flex-direction: column;
+    }
+  }
+</style>

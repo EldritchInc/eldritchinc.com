@@ -31,6 +31,22 @@ export const azathoth = {
   demoVideoUrl: null as string | null,
 } as const;
 
+// Google Analytics 4. It loads only after a visitor accepts analytics cookies.
+export const analytics = {
+  measurementId: "G-0GY61YDCZT",
+  consentKey: "eldritch-analytics-consent",
+} as const;
+
+// Netlify Forms. Names must match the form-name each form submits.
+export const forms = {
+  releaseNotes: "release-notes",
+  earlyAccess: "azathoth-team-early-access",
+  teamSizes: ["1–5", "6–20", "21–100", "100+"],
+} as const;
+
+export const releaseUrl = (tag: string) =>
+  `https://github.com/EldritchInc/azathoth/releases/tag/${tag}`;
+
 export const ui = {
   pypiName: "azathoth-ui",
   pypiUrl: "https://pypi.org/project/azathoth-ui/",

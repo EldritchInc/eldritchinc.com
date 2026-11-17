@@ -1,6 +1,8 @@
 ---
+import ConsentBanner from "../components/ConsentBanner.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
+import JsonLd from "../components/JsonLd.astro";
 import { site } from "../data/site";
 import "../styles/global.css";
 
@@ -8,12 +10,20 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  // "article" for News posts; "website" everywhere else.
+  type?: "website" | "article";
+  // Structured data for this page.
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+  noindex?: boolean;
 }
 
 const {
   title = site.name,
   description = "Eldritch helps companies cut what their AI workflows cost and prove quality held, with Azathoth, an open-source engine that runs in your own environment.",
   image = "/images/og-eldritch.png",
+  type = "website",
+  schema,
+  noindex = false,
 } = Astro.props;
 
 const pageTitle = title === site.name ? title : `${title} | ${site.name}`;
@@ -43,7 +53,15 @@ const socialImageUrl = new URL(image, Astro.site);
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
     />
 
-    <meta property="og:type" content="website" />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Eldritch News"
+      href="/news/rss.xml"
+    />
+
+    <meta property="og:type" content={type} />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
@@ -56,6 +74,8 @@ const socialImageUrl = new URL(image, Astro.site);
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImageUrl} />
+
+    {schema && <JsonLd data={schema} />}
   </head>
 
   <body>
@@ -68,6 +88,8 @@ const socialImageUrl = new URL(image, Astro.site);
 
       <Footer />
     </div>
+
+    <ConsentBanner />
   </body>
 </html>
 
