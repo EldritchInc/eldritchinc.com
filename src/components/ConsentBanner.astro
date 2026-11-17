@@ -1,0 +1,183 @@
+---
+// Analytics consent. Google Analytics loads only after a visitor accepts.
+// The choice is remembered in this browser.
+import { analytics } from "../data/site";
+---
+
+<div
+  class="consent"
+  role="region"
+  aria-label="Analytics cookies"
+  data-consent
+  data-ga={analytics.measurementId}
+  data-key={analytics.consentKey}
+  hidden
+>
+  <p>
+    We use analytics cookies to see which pages help.
+    <a href="/privacy/">Privacy policy</a>
+  </p>
+  <div class="consent-actions">
+    <button class="button button-signal" type="button" data-consent-accept>Accept</button>
+    <button class="button button-ghost" type="button" data-consent-decline>Decline</button>
+  </div>
+</div>
+
+<style>
+  .consent {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 50;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    max-width: 760px;
+    margin-inline: auto;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--color-deep-border);
+    background: var(--color-deep);
+    color: var(--color-surface);
+    box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.5);
+  }
+
+  .consent[hidden] {
+    display: none;
+  }
+
+  .consent p {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .consent a {
+    margin-left: 0.4rem;
+    color: var(--color-signal);
+  }
+
+  .consent-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .consent .button {
+    min-height: 2.75rem;
+    width: auto;
+  }
+</style>
+
+<script>
+  type Choice = "accepted" | "declined";
+  type GtagWindow = Window & {
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
+  };
+
+  const banner = document.querySelector<HTMLElement>("[data-consent]");
+  const measurementId = banner?.dataset.ga ?? "";
+  const key = banner?.dataset.key ?? "analytics-consent";
+  const w = window as GtagWindow;
+
+  function read(): Choice | null {
+    try {
+      const value = window.localStorage.getItem(key);
+      return value === "accepted" || value === "declined" ? value : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function save(choice: Choice) {
+    try {
+      window.localStorage.setItem(key, choice);
+    } catch {
+      // Storage unavailable: the choice lasts for this page only.
+    }
+  }
+
+  let loaded = false;
+  function loadAnalytics() {
+    if (loaded || !measurementId) return;
+    loaded = true;
+    w.dataLayer = w.dataLayer || [];
+    w.gtag = function gtag() {
+      // gtag.js expects the arguments object itself.
+      // eslint-disable-next-line prefer-rest-params
+      w.dataLayer!.push(arguments);
+    };
+    w.gtag("js", new Date());
+    w.gtag("config", measurementId, {
+      allow_google_signals: false,
+      allow_ad_personalization_signals: false,
+    });
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
+    document.head.appendChild(script);
+  }
+
+  // Sends an event only when analytics was accepted.
+  function track(name: string) {
+    if (loaded && w.gtag) w.gtag("event", name);
+  }
+
+  function decide(choice: Choice) {
+    save(choice);
+    if (banner) banner.hidden = true;
+    if (choice === "accepted") loadAnalytics();
+  }
+
+  const current = read();
+  if (current === "accepted") loadAnalytics();
+  else if (current === null && banner) banner.hidden = false;
+
+  banner?.querySelector("[data-consent-accept]")?.addEventListener("click", () => decide("accepted"));
+  banner?.querySelector("[data-consent-decline]")?.addEventListener("click", () => decide("declined"));
+
+  // Any element with [data-consent-reset] reopens the choice (used on /privacy).
+  document.querySelectorAll("[data-consent-reset]").forEach((el) =>
+    el.addEventListener("click", () => {
+      try {
+        window.localStorage.removeItem(key);
+      } catch {
+        // ignore
+      }
+      if (banner) banner.hidden = false;
+    }),
+  );
+
+  // Track Book a review clicks.
+  document.addEventListener("click", (event) => {
+    const link = (event.target as HTMLElement).closest?.("a[href*='calendly.com']");
+    if (link) track("book_review_click");
+  });
+
+  // Netlify forms: submit in place, show the confirmation, record the event.
+  document.querySelectorAll<HTMLFormElement>("form[data-netlify]").forEach((form) => {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const body = new URLSearchParams(new FormData(form) as unknown as Record<string, string>);
+      try {
+        const response = await fetch("/", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: body.toString(),
+        });
+        if (!response.ok) throw new Error(String(response.status));
+        const done = form.querySelector<HTMLElement>(".form-done");
+        form.querySelectorAll<HTMLElement>(":scope > :not(.form-done)").forEach((el) => {
+          if (el.getAttribute("type") !== "hidden") el.hidden = true;
+        });
+        if (done) done.hidden = false;
+        const eventName = form.dataset.track;
+        if (eventName) track(eventName);
+      } catch {
+        // Fall back to a normal post, which lands on /thanks/.
+        form.submit();
+      }
+    });
+  });
+</script>

@@ -16,8 +16,10 @@ import { azathoth, mcp, site, ui } from "../data/site";
       <div>
         <p class="footer-heading">Company</p>
         <a href="/workwithus">Work with us</a>
+        <a href="/news">News</a>
         <a href="/about">About</a>
         <a href="/contact">Contact</a>
+        <a href="/privacy/">Privacy</a>
       </div>
 
       <div>
@@ -36,6 +38,7 @@ import { azathoth, mcp, site, ui } from "../data/site";
   <div class="site-container footer-meta">
     <span>© {new Date().getFullYear()} Eldritch, Inc. · {site.location}</span>
     <a href={`mailto:${site.email}`}>{site.email}</a>
+    <a href="/news/rss.xml">RSS</a>
     <span>Azathoth {azathoth.version}</span>
   </div>
 </footer>

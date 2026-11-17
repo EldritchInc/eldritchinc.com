@@ -1,5 +1,6 @@
 ---
 import CopyCommand from "../components/CopyCommand.astro";
+import EarlyAccessForm from "../components/EarlyAccessForm.astro";
 import Lifecycle from "../components/Lifecycle.astro";
 import Screenshot from "../components/Screenshot.astro";
 import Tendrils from "../components/Tendrils.astro";
@@ -243,16 +244,61 @@ const comparison = [
   ["Same engine on a laptop and on AWS", "Separate stories for development and the cloud"],
 ];
 
-const roadmap = [
-  { when: "Next", name: "azathoth-team", text: "Azathoth for teams. Follow along on GitHub." },
-  { when: "1.5", name: "Audio and video input", text: "The same evidence trail for recordings that 1.3 brings to documents." },
-  { when: "Planned", name: "MCP server in the AWS template", text: "Run the agent server from the same CloudFormation stack as the workers." },
-  { when: "Planned", name: "Cthulhu", text: "A paid optimizer that improves prompts, structure and escalation, not just model choice." },
+const shipped = [
+  { version: "1.4", name: "The editor and remotes", href: "/news/azathoth-1-4-0-editor/" },
+  { version: "1.3", name: "Documents and provenance", href: "/news/azathoth-1-3-documents/" },
+  { version: "1.2", name: "MCP: workflows as agent tools", href: "/news/azathoth-1-2-mcp/" },
+  { version: "1.1", name: "Azathoth on AWS", href: "/news/azathoth-1-1-aws/" },
+  { version: "1.0", name: "The first release", href: "/news/azathoth-1-0/" },
 ];
+
+const ahead: { when: string; name: string; text: string; href?: string }[] = [
+  {
+    when: "Now building",
+    name: "1.5: the editor at full parity",
+    text: "Production, judges and benchmarks, optimization, and spend and reporting, all in the editor.",
+    href: "/news/now-building-azathoth-1-5/",
+  },
+  {
+    when: "Next",
+    name: "1.6: remotes you can work on",
+    text: "The service API over HTTP, per-remote permissions, runs on the remote's workers, and an instance switcher in the editor.",
+  },
+  {
+    when: "Early access list open",
+    name: "azathoth-team",
+    text: "The commercial team version of Azathoth's shared server, built on the same open core.",
+    href: "/news/azathoth-team-early-access/",
+  },
+];
+
+const planned = [
+  { name: "Audio and video input", text: "The same evidence trail for recordings that 1.3 brings to documents." },
+  { name: "Cthulhu", text: "The paid optimizer that improves prompts, structure and escalation, not just model choice." },
+];
+
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Azathoth",
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "macOS, Linux, Windows",
+  softwareVersion: azathoth.version,
+  description:
+    "An open-source engine for AI workflows: it runs them, records every step as evidence, benchmarks them and makes them cheaper, with a local editor that shows each workflow as a graph.",
+  url: "https://eldritchinc.com/azathoth/",
+  downloadUrl: ui.pypiUrl,
+  codeRepository: azathoth.repo,
+  license: "https://opensource.org/licenses/MIT",
+  isAccessibleForFree: true,
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  author: { "@type": "Organization", name: "Eldritch, Inc.", url: "https://eldritchinc.com" },
+};
 ---
 
 <Layout
   title="Azathoth"
+  schema={softwareSchema}
   description={`Azathoth ${azathoth.version} is an open-source engine for AI workflows, now with an editor: build, run and share workflows on a graph on your own machine. It benchmarks them, makes them cheaper, cites the source page for document answers, and serves promoted workflows to AI agents.`}
 >
   <section class="hero section-dark">
@@ -764,27 +810,81 @@ const roadmap = [
     </div>
   </section>
 
-  <section class="section">
+  <section class="section roadmap-section" id="roadmap">
     <div class="site-container split">
       <div>
-        <p class="eyebrow">Coming next</p>
+        <p class="eyebrow">Roadmap</p>
         <h2 class="heading">Where Azathoth is headed.</h2>
         <p class="lede">
-          Planned, not yet released. Follow along on GitHub.
+          What's shipped, what's being built now, and what comes after. No
+          dates on planned work. Follow along on GitHub.
         </p>
       </div>
 
       <div class="roadmap">
+        <div class="road-group">
+          <p class="soon">Shipped</p>
+          <ul class="shipped">
+            {
+              shipped.map((item) => (
+                <li>
+                  <a href={item.href}>
+                    <span class="road-version">{item.version}</span>
+                    {item.name}
+                    <span aria-hidden="true">→</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
         {
-          roadmap.map((item) => (
+          ahead.map((item) => (
             <article>
               <p class="soon">{item.when}</p>
               <h3>{item.name}</h3>
               <p>{item.text}</p>
+              {item.href && (
+                <a class="text-link road-link" href={item.href}>
+                  Read more <span aria-hidden="true">→</span>
+                </a>
+              )}
             </article>
           ))
         }
+
+        <div class="road-group">
+          <p class="soon">Planned, no dates</p>
+          {
+            planned.map((item) => (
+              <div class="planned">
+                <h3>{item.name}</h3>
+                <p>{item.text}</p>
+              </div>
+            ))
+          }
+        </div>
       </div>
+    </div>
+  </section>
+
+  <section class="section early-section" id="early-access">
+    <div class="site-container split">
+      <div>
+        <p class="eyebrow">azathoth-team</p>
+        <h2 class="heading">Join the early access list.</h2>
+        <p class="lede">
+          The commercial team version of Azathoth's shared server, built on
+          the same open core: sign-in through your identity provider, roles,
+          audit, and reporting across your organization.
+        </p>
+        <a class="text-link early-more" href="/news/azathoth-team-early-access/">
+          What's planned <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <EarlyAccessForm id="azathoth-early-access" />
     </div>
   </section>
 
@@ -1423,6 +1523,63 @@ const roadmap = [
 
   .roadmap {
     border-top: 1px solid var(--color-border);
+  }
+
+  .road-group {
+    padding-block: 1.75rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .shipped {
+    display: grid;
+    padding: 0;
+    margin: 0.25rem 0 0;
+    list-style: none;
+  }
+
+  .shipped a {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    padding-block: 0.55rem;
+    color: var(--color-foreground);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .shipped a:hover,
+  .shipped a:focus-visible {
+    color: var(--color-accent);
+  }
+
+  .road-version {
+    min-width: 2.5rem;
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+  }
+
+  .road-link {
+    margin-top: 0.9rem;
+  }
+
+  .planned + .planned {
+    margin-top: 1.25rem;
+  }
+
+  .planned h3 {
+    margin: 0.5rem 0 0.4rem;
+    font-size: 1.25rem;
+  }
+
+  .planned p {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+
+  .early-more {
+    margin-top: 1.75rem;
   }
 
   .roadmap article {

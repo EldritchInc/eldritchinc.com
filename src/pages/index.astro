@@ -48,6 +48,24 @@ const audiences = [
 ---
 
 <Layout
+  schema={{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: site.name,
+    url: site.url,
+    logo: `${site.url}/favicon.png`,
+    email: site.email,
+    description:
+      "Eldritch builds Azathoth, an open-source engine for AI workflows, and helps companies make their AI workflows cheaper with the evidence that quality held.",
+    founder: { "@type": "Person", name: "Eris Discordia Montano" },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Brooklyn",
+      addressRegion: "NY",
+      addressCountry: "US",
+    },
+    sameAs: [site.githubOrg],
+  }}
   description="Cut what your AI workflows cost and prove quality held. Azathoth is an open-source engine that runs in your own environment, cites the exact page behind every document answer, and serves your promoted workflows to AI agents as governed tools."
 >
   <section class="hero section-dark">
