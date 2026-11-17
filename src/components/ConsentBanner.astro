@@ -156,9 +156,12 @@ import { analytics } from "../data/site";
   });
 
   // Netlify forms: submit in place, show the confirmation, record the event.
+  // On failure the visitor stays on the page with a message and an email link.
   document.querySelectorAll<HTMLFormElement>("form[data-netlify]").forEach((form) => {
+    const error = form.querySelector<HTMLElement>(".form-error");
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
+      if (error) error.hidden = true;
       const body = new URLSearchParams(new FormData(form) as unknown as Record<string, string>);
       try {
         const response = await fetch("/", {
@@ -168,15 +171,14 @@ import { analytics } from "../data/site";
         });
         if (!response.ok) throw new Error(String(response.status));
         const done = form.querySelector<HTMLElement>(".form-done");
-        form.querySelectorAll<HTMLElement>(":scope > :not(.form-done)").forEach((el) => {
+        form.querySelectorAll<HTMLElement>(":scope > :not(.form-done):not(.form-error)").forEach((el) => {
           if (el.getAttribute("type") !== "hidden") el.hidden = true;
         });
         if (done) done.hidden = false;
         const eventName = form.dataset.track;
         if (eventName) track(eventName);
       } catch {
-        // Fall back to a normal post, which lands on /thanks/.
-        form.submit();
+        if (error) error.hidden = false;
       }
     });
   });

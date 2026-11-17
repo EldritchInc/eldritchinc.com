@@ -47,6 +47,10 @@ const { dark = false } = Astro.props;
   <p class="form-done" role="status" hidden>
     Thanks. You're on the list for release notes.
   </p>
+  <p class="form-error" role="alert" hidden>
+    That didn't go through. Please try again, or email
+    <a href="mailto:eris@eldritchinc.com">eris@eldritchinc.com</a>.
+  </p>
 </form>
 
 <style>
@@ -87,7 +91,8 @@ const { dark = false } = Astro.props;
   }
 
   .form-note,
-  .form-done {
+  .form-done,
+  .form-error {
     grid-column: 2;
     margin: 0;
     color: var(--color-muted);
@@ -111,6 +116,15 @@ const { dark = false } = Astro.props;
     color: var(--color-deep-muted);
   }
 
+  .form-error {
+    color: #a3352b;
+    font-size: 0.95rem;
+  }
+
+  .dark .form-error {
+    color: #f0a59c;
+  }
+
   .dark .form-done {
     color: var(--color-signal);
   }
@@ -127,7 +141,8 @@ const { dark = false } = Astro.props;
     }
 
     .form-note,
-    .form-done {
+    .form-done,
+    .form-error {
       grid-column: 1;
     }
 
