@@ -1,4 +1,5 @@
 ---
+import EarlyAccessForm from "../components/EarlyAccessForm.astro";
 import Tendrils from "../components/Tendrils.astro";
 import Layout from "../layouts/Layout.astro";
 import { azathoth, offers, site } from "../data/site";
@@ -332,6 +333,25 @@ const faqs = [
     </div>
   </section>
 
+  <section class="section early" id="early-access">
+    <div class="site-container split">
+      <div>
+        <p class="eyebrow">azathoth-team</p>
+        <h2 class="heading">Running Azathoth across a team?</h2>
+        <p class="lede">
+          azathoth-team is the commercial team version of Azathoth's shared
+          server: sign-in through your identity provider, roles, audit, and
+          reporting across your organization. The early access list is open.
+        </p>
+        <a class="text-link early-more" href="/news/azathoth-team-early-access/">
+          What's planned <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <EarlyAccessForm id="workwithus-early-access" />
+    </div>
+  </section>
+
   <section class="section faq">
     <div class="site-container split">
       <div>
@@ -654,6 +674,10 @@ const faqs = [
     margin: 0;
     color: var(--color-muted);
     line-height: 1.65;
+  }
+
+  .early-more {
+    margin-top: 1.75rem;
   }
 
   .faq-list {
