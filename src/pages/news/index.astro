@@ -1,0 +1,132 @@
+---
+import ReleaseNotesForm from "../../components/ReleaseNotesForm.astro";
+import Layout from "../../layouts/Layout.astro";
+import { formatDate, getPosts, postUrl } from "../../lib/news";
+
+const posts = await getPosts();
+---
+
+<Layout
+  title="News"
+  description="Azathoth releases and Eldritch news, in plain language: what shipped, what's being built, and what's next."
+>
+  <section class="section news-head">
+    <div class="site-container">
+      <p class="eyebrow">News</p>
+      <h1 class="heading">What shipped, and what's next.</h1>
+      <p class="lede">
+        Releases and updates in plain language. For every technical detail,
+        each post links to its release and the changelog.
+      </p>
+    </div>
+  </section>
+
+  <section class="section news-list">
+    <div class="site-container">
+      <ol class="posts">
+        {
+          posts.map((post) => (
+            <li>
+              <time datetime={post.data.date.toISOString().slice(0, 10)}>
+                {formatDate(post.data.date)}
+              </time>
+              <div>
+                <h2>
+                  <a href={postUrl(post)}>{post.data.title}</a>
+                </h2>
+                <p>{post.data.description}</p>
+              </div>
+              <a class="text-link read" href={postUrl(post)} aria-hidden="true" tabindex="-1">
+                Read <span>→</span>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="news-signup">
+        <ReleaseNotesForm />
+        <p class="rss">
+          Prefer a feed? <a href="/news/rss.xml">Subscribe with RSS</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .news-head {
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  .news-list {
+    padding-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  .posts {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .posts li {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr) auto;
+    gap: 1rem 2.5rem;
+    align-items: baseline;
+    padding-block: 2rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  time {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .posts h2 {
+    margin: 0;
+    font-size: clamp(1.3rem, 2.4vw, 1.75rem);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  .posts h2 a {
+    text-decoration: none;
+  }
+
+  .posts h2 a:hover,
+  .posts h2 a:focus-visible {
+    color: var(--color-accent);
+  }
+
+  .posts p {
+    max-width: 680px;
+    margin: 0.6rem 0 0;
+    color: var(--color-muted);
+    line-height: 1.6;
+  }
+
+  .news-signup {
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+
+  .rss {
+    margin: 1rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 760px) {
+    .posts li {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+
+    .read {
+      display: none;
+    }
+  }
+</style>

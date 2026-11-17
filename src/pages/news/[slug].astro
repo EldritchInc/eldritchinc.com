@@ -1,0 +1,232 @@
+---
+import { render } from "astro:content";
+import EarlyAccessForm from "../../components/EarlyAccessForm.astro";
+import ReleaseNotesForm from "../../components/ReleaseNotesForm.astro";
+import Layout from "../../layouts/Layout.astro";
+import { azathoth, releaseUrl, site } from "../../data/site";
+import { formatDate, getPosts, postUrl, type Post } from "../../lib/news";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, description, date, release, install, earlyAccess } = post.data;
+const isoDate = date.toISOString().slice(0, 10);
+const url = new URL(postUrl(post), Astro.site).toString();
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  datePublished: isoDate,
+  dateModified: isoDate,
+  mainEntityOfPage: url,
+  url,
+  image: new URL("/images/og-eldritch.png", Astro.site).toString(),
+  author: {
+    "@type": "Person",
+    name: "Eris Discordia Montano",
+    url: new URL("/about/", Astro.site).toString(),
+  },
+  publisher: {
+    "@type": "Organization",
+    name: site.name,
+    url: site.url,
+    logo: new URL("/favicon.png", Astro.site).toString(),
+  },
+};
+---
+
+<Layout title={title} description={description} type="article" schema={schema}>
+  <article class="section post">
+    <div class="site-container post-inner">
+      <a class="text-link back" href="/news">
+        <span aria-hidden="true">←</span> All news
+      </a>
+
+      <header>
+        <time datetime={isoDate}>{formatDate(date)}</time>
+        <h1>{title}</h1>
+        <p class="lede">{description}</p>
+      </header>
+
+      <div class="post-body">
+        <Content />
+      </div>
+
+      {
+        release && (
+          <p class="post-links">
+            Technical detail:
+            <a href={releaseUrl(release)} target="_blank" rel="noreferrer">
+              the {release} release on GitHub
+            </a>
+            and
+            <a href={azathoth.changelog} target="_blank" rel="noreferrer">
+              the changelog
+            </a>
+            .
+          </p>
+        )
+      }
+
+      {
+        earlyAccess && (
+          <div class="post-early" id="early-access">
+            <h2>Join the azathoth-team early access list</h2>
+            <EarlyAccessForm id="post-early-access" />
+          </div>
+        )
+      }
+
+      <footer class="post-end">
+        {
+          install && (
+            <div class="command" aria-label="Install command">
+              <code>{install}</code>
+            </div>
+          )
+        }
+
+        <ReleaseNotesForm />
+
+        <div class="post-cta">
+          <p>Want a hand putting Azathoth to work?</p>
+          <a class="button button-signal" href={site.booking} target="_blank" rel="noreferrer">
+            {site.bookingLabel}
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </footer>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .post-inner {
+    max-width: 780px;
+  }
+
+  .back {
+    margin-bottom: 3rem;
+  }
+
+  time {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  h1 {
+    margin: 1rem 0 0;
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 1.02;
+  }
+
+  header .lede {
+    margin-top: 1.5rem;
+  }
+
+  .post-body {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--color-border);
+    font-size: 1.1rem;
+    line-height: 1.75;
+  }
+
+  .post-body :global(h2) {
+    margin: 2.5rem 0 0.75rem;
+    font-size: 1.45rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .post-body :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .post-body :global(p),
+  .post-body :global(li) {
+    color: #2c312c;
+  }
+
+  .post-body :global(p) {
+    margin: 0 0 1.25rem;
+  }
+
+  .post-body :global(ul) {
+    padding-left: 1.25rem;
+    margin: 0 0 1.25rem;
+  }
+
+  .post-body :global(li) {
+    margin-bottom: 0.6rem;
+  }
+
+  .post-body :global(a) {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  .post-body :global(code) {
+    padding: 0.1em 0.35em;
+    background: #e9ece6;
+    font-size: 0.9em;
+  }
+
+  .post-links {
+    margin: 2rem 0 0;
+    padding: 1rem 1.25rem;
+    border-left: 3px solid var(--color-accent);
+    background: var(--color-surface);
+    color: var(--color-muted);
+  }
+
+  .post-links a {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  .post-early {
+    margin-top: 3rem;
+  }
+
+  .post-early h2 {
+    margin: 0 0 1.25rem;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .post-end {
+    display: grid;
+    gap: 2rem;
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .post-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+  }
+
+  .post-cta p {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+</style>
