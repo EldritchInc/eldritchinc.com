@@ -50,6 +50,45 @@ const newRows = [
   },
 ];
 
+const editor15 = [
+  {
+    name: "Production",
+    text: "Promote and roll back, and the editor asks first, naming what will change. A Production tab shows what runs now, who promoted it, and every invocation with its outcome, caller and label. Invoke on text, JSON or a file, and resume an incomplete invocation.",
+  },
+  {
+    name: "Labels and model policy",
+    text: "Label inputs public, internal or restricted, and see the label on every run, invocation, benchmark and case. Restricted content stays hidden until you choose to show it, and that's never remembered. Declare a model's no-retention and no-training policy, with who declared it and when.",
+  },
+  {
+    name: "Judges and feedback",
+    text: "Manage the judge rotation. Mark any run good or bad, with a reason and a corrected output. See what a run cited and the child runs it started.",
+  },
+  {
+    name: "Benchmarks from real runs",
+    text: "Build benchmarks and add cases by hand, or straight from a run, production runs included. A person always chooses the expected output, and a case keeps its run's label.",
+  },
+  {
+    name: "Optimize, and see the savings",
+    text: "Optimize from a workflow's page, rank the candidates beside what you run now, and promote the winner, with savings per run and a projection over production's last 30 days.",
+  },
+  {
+    name: "Spend",
+    text: "What your instance spent, by day, week or month, per workflow and model. Billed and estimated dollars are never added together, and a call with no known price is never treated as free.",
+  },
+  {
+    name: "Diffs and exports",
+    text: "Compare any two revisions of a workflow, tool or benchmark, value by value, and download any revision exactly as the command line exports it.",
+  },
+  {
+    name: "Tools from MCP servers",
+    text: "Turn a tool that any MCP server serves into an Azathoth tool, shown for review before it's imported.",
+  },
+  {
+    name: "Every button names its action",
+    text: "Each button that changes something names the action it takes, and says why when that action isn't allowed.",
+  },
+];
+
 const newItems = [
   {
     name: "Remotes",
@@ -65,7 +104,7 @@ const newItems = [
   },
   {
     name: "A stable API to build on",
-    text: "The service API that the command line, the MCP server and the editor all call is covered by Azathoth's 1.x promise: it only grows.",
+    text: "The service API that the command line, the MCP server and the editor all call is covered by Azathoth's 1.x promise: it only grows. Since 1.5, it covers everything the command line does.",
   },
 ];
 
@@ -115,6 +154,7 @@ const highlights = [
       "OAuth 2.1 resource server with a scope per tool",
       "Every invocation audited with its caller",
       "Workflow steps can call tools other MCP servers serve",
+      "Tools from any MCP server, reviewed before they're imported",
     ],
   },
 ];
@@ -155,6 +195,7 @@ const features = [
       "An approved model list your organization controls",
       "Mix models step by step: the cheap one where it's enough",
       "Explicit failover to named substitutes if a model goes offline",
+      "Sensitivity labels, and a declared no-retention, no-training policy per model",
     ],
   },
   {
@@ -162,7 +203,8 @@ const features = [
     items: [
       "Benchmarks built from real cases, versioned like code",
       "Four ways to score: exact, normalized, schema, or AI judge",
-      "Thumbs-up and thumbs-down feedback on real runs",
+      "Good-or-bad feedback on real runs, with a reason and a corrected output",
+      "Benchmark cases built from real runs, a person choosing each expected output",
       "Failed runs score zero, so broken never looks cheap",
     ],
   },
@@ -172,12 +214,14 @@ const features = [
       "Searches for strictly cheaper models that hold quality",
       "Keeps today's version in every round for a fair comparison",
       "Every experiment saved for inspection",
+      "Savings per run, projected over production's last 30 days",
       "Never deploys on its own. Promotion is always explicit",
     ],
   },
   {
     area: "Production",
     items: [
+      "Promote, roll back and invoke from the editor or the command line",
       "A versioned JSON job interface: one request in, one result out",
       "Idempotent invocations, so retries never double-run",
       "Interrupted runs resume where they stopped",
@@ -188,7 +232,9 @@ const features = [
   {
     area: "Operations",
     items: [
-      "A local editor to compose, run and share on a graph",
+      "A local editor that does everything the command line does",
+      "Spend reports, billed and estimated dollars always apart",
+      "Diffs between any two revisions, value by value",
       "Every operation available from bash",
       "Append-only history; revert by re-importing",
       "SQLite on a laptop, PostgreSQL in production",
@@ -245,6 +291,7 @@ const comparison = [
 ];
 
 const shipped = [
+  { version: "1.5", name: "Optimize and production in the editor", href: "/news/azathoth-1-5/" },
   { version: "1.4", name: "The editor and remotes", href: "/news/azathoth-1-4-0-editor/" },
   { version: "1.3", name: "Documents and provenance", href: "/news/azathoth-1-3-documents/" },
   { version: "1.2", name: "MCP: workflows as agent tools", href: "/news/azathoth-1-2-mcp/" },
@@ -255,12 +302,6 @@ const shipped = [
 const ahead: { when: string; name: string; text: string; href?: string }[] = [
   {
     when: "Now building",
-    name: "1.5: the editor at full parity",
-    text: "Production, judges and benchmarks, optimization, and spend and reporting, all in the editor.",
-    href: "/news/now-building-azathoth-1-5/",
-  },
-  {
-    when: "Next",
     name: "1.6: remotes you can work on",
     text: "The service API over HTTP, per-remote permissions, runs on the remote's workers, and an instance switcher in the editor.",
   },
@@ -305,7 +346,7 @@ const softwareSchema = {
     <Tendrils />
 
     <div class="site-container hero-inner">
-      <p class="eyebrow eyebrow-light">Azathoth 1.4.0 · now with an editor</p>
+      <p class="eyebrow eyebrow-light">Azathoth 1.5.0 · everything the command line does, now in the editor</p>
 
       <h1 class="display">Build AI workflows you can see.</h1>
 
@@ -365,7 +406,10 @@ const softwareSchema = {
 
   <section class="section whats-new">
     <div class="site-container">
-      <p class="eyebrow">What's new in 1.4</p>
+      <p class="eyebrow">The editor</p>
+      <h2 class="heading editor-heading">
+        Everything the command line does, the editor does too.
+      </h2>
 
       <div class="new-rows">
         {
@@ -385,16 +429,33 @@ const softwareSchema = {
         }
       </div>
 
-      <div class="new-more">
-        <div class="new-grid">
+      <div class="editor-15">
+        <p class="new-label-15">New in 1.5</p>
+        <div class="grid-15">
           {
-            newItems.map((item) => (
+            editor15.map((item) => (
               <article>
                 <h3>{item.name}</h3>
                 <p>{item.text}</p>
               </article>
             ))
           }
+        </div>
+      </div>
+
+      <div class="new-more">
+        <div>
+          <p class="new-label-15 since-14">Since 1.4</p>
+          <div class="new-grid">
+            {
+              newItems.map((item) => (
+                <article>
+                  <h3>{item.name}</h3>
+                  <p>{item.text}</p>
+                </article>
+              ))
+            }
+          </div>
         </div>
 
         <Screenshot
@@ -1050,6 +1111,53 @@ const softwareSchema = {
     line-height: 1.7;
   }
 
+  .editor-heading {
+    max-width: 900px;
+    margin-bottom: clamp(3.5rem, 7vw, 5.5rem);
+  }
+
+  .editor-15 {
+    margin-top: clamp(5rem, 9vw, 8rem);
+    padding-top: clamp(3rem, 6vw, 4.5rem);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .new-label-15 {
+    display: inline-block;
+    margin: 0 0 2rem;
+    padding: 0.3rem 0.7rem;
+    background: var(--color-deep);
+    color: var(--color-signal);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .since-14 {
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-muted);
+  }
+
+  .grid-15 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.5rem clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .grid-15 h3 {
+    margin: 0 0 0.6rem;
+    font-size: 1.2rem;
+  }
+
+  .grid-15 p {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 1.02rem;
+    line-height: 1.7;
+  }
+
   .new-rows {
     display: grid;
     gap: clamp(4rem, 8vw, 7rem);
@@ -1662,6 +1770,7 @@ const softwareSchema = {
   }
 
   @media (max-width: 900px) {
+    .grid-15,
     .tiles,
     .new-row,
     .new-more,

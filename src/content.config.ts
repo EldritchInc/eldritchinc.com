@@ -16,6 +16,10 @@ const news = defineCollection({
     install: z.string().optional(),
     // Show the azathoth-team early access form on this post.
     earlyAccess: z.boolean().default(false),
+    // A video for the post (e.g. a screen capture). Omit until it exists;
+    // the post shows nothing in its place.
+    video: z.string().url().optional(),
+    videoLabel: z.string().optional(),
   }),
 });
 
