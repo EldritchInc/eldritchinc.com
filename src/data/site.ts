@@ -12,7 +12,7 @@ export const site = {
   githubOrg: "https://github.com/EldritchInc",
 } as const;
 
-const version = "1.4.0";
+const version = "1.5.0";
 
 export const azathoth = {
   version,

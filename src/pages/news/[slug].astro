@@ -17,7 +17,8 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const { title, description, date, release, install, earlyAccess } = post.data;
+const { title, description, date, release, install, earlyAccess, video, videoLabel } =
+  post.data;
 const isoDate = date.toISOString().slice(0, 10);
 const url = new URL(postUrl(post), Astro.site).toString();
 
@@ -61,6 +62,17 @@ const schema = {
       <div class="post-body">
         <Content />
       </div>
+
+      {
+        video && (
+          <p class="post-video">
+            <a class="button button-primary" href={video} target="_blank" rel="noreferrer">
+              {videoLabel ?? "Watch the video"}
+              <span aria-hidden="true">↗</span>
+            </a>
+          </p>
+        )
+      }
 
       {
         release && (
@@ -183,6 +195,10 @@ const schema = {
     padding: 0.1em 0.35em;
     background: #e9ece6;
     font-size: 0.9em;
+  }
+
+  .post-video {
+    margin: 2rem 0 0;
   }
 
   .post-links {
