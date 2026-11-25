@@ -34,7 +34,7 @@ The command runs without a shell. Its token stays in memory, never on disk, and 
 ## Also in 1.6
 
 - **A remote answers requests together,** not one at a time, so a long push holds up nobody else. Two pushes that race on one workflow are told it diverged; neither is saved as a fork.
-- **The model watch,** a new example: a workflow to run every night that tries the models released since its last run on your own benchmarks, and leaves any that do the same work for less waiting for you to promote. It never promotes anything itself.
+- **[The model watch](/news/model-watch/),** a new example: a workflow to run every night that tries the models released since its last run on your own benchmarks, and leaves any that do the same work for less waiting for you to promote. It never promotes anything itself.
 - **Windows.** Serving a remote and the queue worker are tested on Linux and macOS. On Windows they still run, at your own risk, and say so.
 
 ## Upgrading

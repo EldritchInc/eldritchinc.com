@@ -272,7 +272,8 @@ const features = [
   },
 ];
 
-const examples = [
+const examples: { name: string; text: string; href?: string }[] = [
+  { name: "Model watch", text: "Every night, tries newly released models on your own benchmarks and leaves any winner waiting for you to promote. An agent you control.", href: "/news/model-watch/" },
   { name: "Code review", text: "Three reviewers run at once (security, correctness, readability), and a lead reviewer steps in only when there are findings." },
   { name: "Ticket triage", text: "Each ticket is routed to exactly one of four specialists, policy-checked, and escalated to a stronger model when confidence is low." },
   { name: "Novel writer", text: "Plans, outlines and writes a book, each chapter through its own edit-and-verify loop until the story ends." },
@@ -512,7 +513,7 @@ const softwareSchema = {
     <div class="site-container split">
       <div>
         <p class="eyebrow">The bet</p>
-        <h2 class="heading">Models answer prompts. The engine does the rest.</h2>
+        <h2 class="heading">Agents you control.</h2>
       </div>
 
       <div class="prose">
@@ -525,7 +526,16 @@ const softwareSchema = {
         <p>
           Azathoth flips that. The engine holds the full context, runs the
           tools itself, and gives each model only what its step needs.
-          Models never act as agents and never change the workflow.
+          Models answer prompts. They never drive, and never change the
+          workflow.
+        </p>
+
+        <p>
+          That doesn't mean no agents. A workflow that wakes on a schedule,
+          looks at the world, acts and reports back is an agent, one you
+          control: it does only what its steps name, every step is
+          recorded, and anything that would change production waits for a
+          person. The <a href="/news/model-watch/">model watch</a> is one.
         </p>
 
         <p class="emphasis">
@@ -889,7 +899,9 @@ const softwareSchema = {
         {
           examples.map((example) => (
             <article>
-              <h3>{example.name}</h3>
+              <h3>
+                {example.href ? <a href={example.href}>{example.name}</a> : example.name}
+              </h3>
               <p>{example.text}</p>
             </article>
           ))
