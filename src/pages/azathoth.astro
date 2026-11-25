@@ -50,6 +50,33 @@ const newRows = [
   },
 ];
 
+const remote16 = [
+  {
+    name: "Every command, on a remote",
+    text: "Add --remote to any command and it runs on that remote, printing exactly what it prints on your machine: the same lines, records and exit status.",
+  },
+  {
+    name: "The editor, on any remote",
+    text: "Every page of the editor works on a remote as it does on your own instance. A remote's overview shows what it runs, its edition and its jobs.",
+  },
+  {
+    name: "Long work runs as jobs",
+    text: "Runs, invocations, benchmarks and optimizations run on the remote's workers, kept in its database and shown as they go. A run a stopped server left picks up from its journal.",
+  },
+  {
+    name: "Every call is a named action",
+    text: "Each call names the action it asks a remote's policy about and what it tells the audit: 27 actions, five marked high privilege. A refusal gives the policy's reason.",
+  },
+  {
+    name: "Tokens from your identity provider",
+    text: "A remote can take its token from a command, such as gcloud auth print-identity-token. It runs without a shell, and the token is never written to disk.",
+  },
+  {
+    name: "A client for your own code",
+    text: "api.connect(url) gives your Python an instance whose every call goes to the remote, with the same types and errors as a local one.",
+  },
+];
+
 const editor15 = [
   {
     name: "Production",
@@ -104,7 +131,7 @@ const newItems = [
   },
   {
     name: "A stable API to build on",
-    text: "The service API that the command line, the MCP server and the editor all call is covered by Azathoth's 1.x promise: it only grows. Since 1.5, it covers everything the command line does.",
+    text: "The service API that the command line, the MCP server and the editor all call is covered by Azathoth's 1.x promise: it only grows. Since 1.5, it covers everything the command line does, and since 1.6 a remote serves all of it.",
   },
 ];
 
@@ -233,6 +260,8 @@ const features = [
     area: "Operations",
     items: [
       "A local editor that does everything the command line does",
+      "Every command and every editor page also works on a remote",
+      "Remote tokens from a command, such as your identity provider's",
       "Spend reports, billed and estimated dollars always apart",
       "Diffs between any two revisions, value by value",
       "Every operation available from bash",
@@ -243,7 +272,8 @@ const features = [
   },
 ];
 
-const examples = [
+const examples: { name: string; text: string; href?: string }[] = [
+  { name: "Model watch", text: "Every night, tries newly released models on your own benchmarks and leaves any winner waiting for you to promote. An agent you control.", href: "/news/model-watch/" },
   { name: "Code review", text: "Three reviewers run at once (security, correctness, readability), and a lead reviewer steps in only when there are findings." },
   { name: "Ticket triage", text: "Each ticket is routed to exactly one of four specialists, policy-checked, and escalated to a stronger model when confidence is low." },
   { name: "Novel writer", text: "Plans, outlines and writes a book, each chapter through its own edit-and-verify loop until the story ends." },
@@ -291,6 +321,7 @@ const comparison = [
 ];
 
 const shipped = [
+  { version: "1.6", name: "Remotes your team works on", href: "/news/azathoth-1-6/" },
   { version: "1.5", name: "Optimize and production in the editor", href: "/news/azathoth-1-5/" },
   { version: "1.4", name: "The editor and remotes", href: "/news/azathoth-1-4-0-editor/" },
   { version: "1.3", name: "Documents and provenance", href: "/news/azathoth-1-3-documents/" },
@@ -301,19 +332,15 @@ const shipped = [
 
 const ahead: { when: string; name: string; text: string; href?: string }[] = [
   {
-    when: "Now building",
-    name: "1.6: remotes you can work on",
-    text: "The service API over HTTP, per-remote permissions, runs on the remote's workers, and an instance switcher in the editor.",
-  },
-  {
-    when: "Early access list open",
-    name: "azathoth-team",
-    text: "The commercial team version of Azathoth's shared server, built on the same open core.",
-    href: "/news/azathoth-team-early-access/",
+    when: "Out now, for founding teams",
+    name: "azathoth-team 0.1.0",
+    text: "The team tier, built on 1.6: each person signs in as themselves, holds roles on each remote, and leaves a tamper-evident audit.",
+    href: "/news/azathoth-team-founding-teams/",
   },
 ];
 
 const planned = [
+  { name: "More model providers", text: "Direct APIs to Anthropic, OpenAI, xAI and others, and models you run on your own machines." },
   { name: "Audio and video input", text: "The same evidence trail for recordings that 1.3 brings to documents." },
   { name: "Cthulhu", text: "The paid optimizer that improves prompts, structure and escalation, not just model choice." },
 ];
@@ -346,7 +373,7 @@ const softwareSchema = {
     <Tendrils />
 
     <div class="site-container hero-inner">
-      <p class="eyebrow eyebrow-light">Azathoth 1.5.0 · everything the command line does, now in the editor</p>
+      <p class="eyebrow eyebrow-light">Azathoth {azathoth.version} · a shared Azathoth your team works on</p>
 
       <h1 class="display">Build AI workflows you can see.</h1>
 
@@ -430,7 +457,21 @@ const softwareSchema = {
       </div>
 
       <div class="editor-15">
-        <p class="new-label-15">New in 1.5</p>
+        <p class="new-label-15">New in 1.6: remotes</p>
+        <div class="grid-15">
+          {
+            remote16.map((item) => (
+              <article>
+                <h3>{item.name}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="editor-15">
+        <p class="new-label-15">Since 1.5</p>
         <div class="grid-15">
           {
             editor15.map((item) => (
@@ -472,7 +513,7 @@ const softwareSchema = {
     <div class="site-container split">
       <div>
         <p class="eyebrow">The bet</p>
-        <h2 class="heading">Models answer prompts. The engine does the rest.</h2>
+        <h2 class="heading">Agents you control.</h2>
       </div>
 
       <div class="prose">
@@ -485,7 +526,16 @@ const softwareSchema = {
         <p>
           Azathoth flips that. The engine holds the full context, runs the
           tools itself, and gives each model only what its step needs.
-          Models never act as agents and never change the workflow.
+          Models answer prompts. They never drive, and never change the
+          workflow.
+        </p>
+
+        <p>
+          That doesn't mean no agents. A workflow that wakes on a schedule,
+          looks at the world, acts and reports back is an agent, one you
+          control: it does only what its steps name, every step is
+          recorded, and anything that would change production waits for a
+          person. The <a href="/news/model-watch/">model watch</a> is one.
         </p>
 
         <p class="emphasis">
@@ -849,7 +899,9 @@ const softwareSchema = {
         {
           examples.map((example) => (
             <article>
-              <h3>{example.name}</h3>
+              <h3>
+                {example.href ? <a href={example.href}>{example.name}</a> : example.name}
+              </h3>
               <p>{example.text}</p>
             </article>
           ))
@@ -934,14 +986,15 @@ const softwareSchema = {
     <div class="site-container split">
       <div>
         <p class="eyebrow">azathoth-team</p>
-        <h2 class="heading">Join the early access list.</h2>
+        <h2 class="heading">Apply to be a founding team.</h2>
         <p class="lede">
-          The commercial team version of Azathoth's shared server, built on
-          the same open core: sign-in through your identity provider, roles,
-          audit, and reporting across your organization.
+          The team tier of Azathoth, out now: sign-in through your identity
+          provider, roles on each remote, a tamper-evident audit, licensed
+          seats and an admin console. Founding teams get 30–50% off the
+          first year.
         </p>
-        <a class="text-link early-more" href="/news/azathoth-team-early-access/">
-          What's planned <span aria-hidden="true">→</span>
+        <a class="text-link early-more" href="/news/azathoth-team-founding-teams/">
+          What's in 0.1.0 <span aria-hidden="true">→</span>
         </a>
       </div>
 

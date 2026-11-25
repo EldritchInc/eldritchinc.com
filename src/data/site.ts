@@ -12,7 +12,7 @@ export const site = {
   githubOrg: "https://github.com/EldritchInc",
 } as const;
 
-const version = "1.5.0";
+const version = "1.6.0";
 
 export const azathoth = {
   version,
@@ -59,6 +59,17 @@ export const mcp = {
   pypiUrl: "https://pypi.org/project/azathoth-mcp/",
   command: "azathoth-mcp serve",
   guide: "https://github.com/EldritchInc/azathoth/blob/main/docs/mcp.md",
+} as const;
+
+// azathoth-team's plans, shown on /workwithus and in its structured data.
+// Prices obey `offers.showPrices` below.
+export const team = {
+  post: "/news/azathoth-team-founding-teams/",
+  version: "0.1.0",
+  seatPrice: 49,
+  minimumSeats: 5,
+  enterpriseFrom: "$2,000/mo",
+  foundingDiscount: "30–50% off the first year",
 } as const;
 
 // Commercial offers shown on /workwithus.

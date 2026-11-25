@@ -5,6 +5,8 @@ date: 2026-11-17
 earlyAccess: true
 ---
 
+**Update, November 25, 2026:** azathoth-team 0.1.0 is out for founding teams. [Here's what shipped](/news/azathoth-team-founding-teams/). Sign-in is OpenID Connect for now; SAML, rules for restricted data and reporting across remotes, listed below, are still to come.
+
 azathoth-team is the commercial team version of Azathoth's shared server, built on the same open core. The early access list is open.
 
 ## Built for the questions leaders ask
