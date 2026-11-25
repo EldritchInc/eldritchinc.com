@@ -30,7 +30,7 @@ The [early access post](/news/azathoth-team-early-access/) listed more than this
 - **Enterprise:** from $2,000 a month, with SAML and SCIM when they ship, an SLA on audit export, support SLAs, and help with a private deployment.
 - **Founding teams:** 30–50% off the first year, in exchange for a case study and a reference call.
 
-The engine, the MCP server and the single-user editor stay MIT licensed and free. A remote without a licence works as it always has: one owner who can do everything.
+The engine, the MCP server and the single-user editor stay MIT licensed and free. Without azathoth-team, a remote works as it always has: every token can do everything. With azathoth-team installed but no licence running, everyone but the owner can only read and pull.
 
 ## How to get it
 
