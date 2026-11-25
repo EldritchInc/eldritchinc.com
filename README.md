@@ -17,3 +17,4 @@ https://eldritchinc.com
 ```bash
 npm run check
 npm run build
+npm run verify
