@@ -61,6 +61,17 @@ export const mcp = {
   guide: "https://github.com/EldritchInc/azathoth/blob/main/docs/mcp.md",
 } as const;
 
+// azathoth-team's plans, shown on /workwithus and in its structured data.
+// Prices obey `offers.showPrices` below.
+export const team = {
+  post: "/news/azathoth-team-founding-teams/",
+  version: "0.1.0",
+  seatPrice: 49,
+  minimumSeats: 5,
+  enterpriseFrom: "$2,000/mo",
+  foundingDiscount: "30–50% off the first year",
+} as const;
+
 // Commercial offers shown on /workwithus.
 // Set `showPrices` to false to hide every "starting at" price at once.
 export const offers = {

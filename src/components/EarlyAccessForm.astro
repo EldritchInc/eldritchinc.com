@@ -1,5 +1,6 @@
 ---
-// "Join the azathoth-team early access list", submitted to Netlify Forms.
+// "Apply to be an azathoth-team founding team", submitted to Netlify Forms.
+// The form keeps its first name, so every application lands in one list.
 import { forms } from "../data/site";
 
 interface Props {
@@ -56,14 +57,14 @@ const field = (name: string) => `${id}-${name}`;
   </div>
 
   <div class="early-actions">
-    <button class="button button-primary" type="submit">Join the early access list</button>
+    <button class="button button-primary" type="submit">Apply to be a founding team</button>
     <p class="form-note">
       We'll only use this to contact you about azathoth-team. <a href="/privacy/">Privacy policy</a>
     </p>
   </div>
 
   <p class="form-done" role="status" hidden>
-    Thanks, you're on the azathoth-team early access list. We'll be in touch.
+    Thanks, we've got your application to be an azathoth-team founding team. We'll be in touch.
   </p>
 </form>
 

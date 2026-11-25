@@ -2,7 +2,7 @@
 import EarlyAccessForm from "../components/EarlyAccessForm.astro";
 import Tendrils from "../components/Tendrils.astro";
 import Layout from "../layouts/Layout.astro";
-import { azathoth, offers, site } from "../data/site";
+import { azathoth, offers, site, team } from "../data/site";
 
 const engagements = [
   {
@@ -113,6 +113,44 @@ const steps = [
   },
 ];
 
+const teamPlans = [
+  {
+    name: "Team",
+    price: `$${team.seatPrice}`,
+    unit: "per seat per month",
+    text: `From ${team.minimumSeats} seats, $${team.seatPrice * team.minimumSeats} a month. No usage fees. Sign-in through your identity provider, roles on each remote, a tamper-evident audit and an admin console.`,
+  },
+  {
+    name: "Enterprise",
+    price: `From ${team.enterpriseFrom}`,
+    unit: "",
+    text: "Everything in Team, with SAML and SCIM when they ship, an SLA on audit export, support SLAs, and help with a private deployment.",
+  },
+];
+
+const teamSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "azathoth-team",
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "macOS, Linux",
+  softwareVersion: team.version,
+  description:
+    "The team tier of Azathoth: per-person sign-in through your identity provider, roles on each remote, a tamper-evident audit, licensed seats and an admin console.",
+  url: `${site.url}${team.post}`,
+  author: { "@type": "Organization", name: site.name, url: site.url },
+  offers: {
+    "@type": "Offer",
+    priceCurrency: "USD",
+    priceSpecification: {
+      "@type": "UnitPriceSpecification",
+      price: team.seatPrice,
+      priceCurrency: "USD",
+      unitText: "seat per month",
+    },
+  },
+};
+
 const faqs = [
   {
     q: "You're one person. Is that a risk?",
@@ -159,6 +197,7 @@ const faqs = [
 
 <Layout
   title="Work with us"
+  schema={offers.showPrices ? teamSchema : undefined}
   description="Fixed-price engagements that make your AI workflows cheaper and prove quality held, give your AI agents governed access to them, or make document answers cite their sources: a Workflow Cost Audit, an Optimization Pilot, an Agent Access Pilot, a Document Evidence Pilot, and a re-optimization retainer."
 >
   <section class="hero section-dark">
@@ -339,12 +378,33 @@ const faqs = [
         <p class="eyebrow">azathoth-team</p>
         <h2 class="heading">Running Azathoth across a team?</h2>
         <p class="lede">
-          azathoth-team is the commercial team version of Azathoth's shared
-          server: sign-in through your identity provider, roles, audit, and
-          reporting across your organization. The early access list is open.
+          azathoth-team {team.version}, the team tier of Azathoth, is out for
+          founding teams. Each person signs in as themselves, holds roles on
+          each remote, and leaves a tamper-evident record of what they did.
         </p>
-        <a class="text-link early-more" href="/news/azathoth-team-early-access/">
-          What's planned <span aria-hidden="true">→</span>
+
+        {
+          offers.showPrices && (
+            <div class="team-plans">
+              {teamPlans.map((plan) => (
+                <article>
+                  <h3>{plan.name}</h3>
+                  <p class="team-price">
+                    {plan.price} {plan.unit && <span>{plan.unit}</span>}
+                  </p>
+                  <p>{plan.text}</p>
+                </article>
+              ))}
+              <p class="team-founding">
+                Founding teams get {team.foundingDiscount}, in exchange for
+                a case study and a reference call.
+              </p>
+            </div>
+          )
+        }
+
+        <a class="text-link early-more" href={team.post}>
+          What's in {team.version} <span aria-hidden="true">→</span>
         </a>
       </div>
 
@@ -678,6 +738,46 @@ const faqs = [
 
   .early-more {
     margin-top: 1.75rem;
+  }
+
+  .team-plans {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .team-plans article {
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .team-plans h3 {
+    margin: 0;
+    font-size: 1.15rem;
+  }
+
+  .team-price {
+    margin: 0.5rem 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+
+  .team-price span {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .team-plans article p:last-child {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.6;
+  }
+
+  .team-founding {
+    margin: 0;
+    font-weight: 600;
   }
 
   .faq-list {
